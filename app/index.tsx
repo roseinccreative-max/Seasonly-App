@@ -1,21 +1,5 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { Redirect } from 'expo-router';
 
-export default function HomeScreen() {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Seasonly</Text>
-    </View>
-  );
+export default function Index() {
+  return <Redirect href="/(auth)" />;
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  text: {
-    fontSize: 24,
-    fontWeight: 'bold',
-  },
-});

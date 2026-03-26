@@ -4,7 +4,6 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { StepperHeader } from '@/components/ui/StepperHeader';
 import { Button } from '@/components/ui/Button';
-import { Card } from '@/components/ui/Card';
 import { Colors } from '@/constants/colors';
 import { mockStudios, mockServices } from '@/constants/mockData';
 
@@ -15,29 +14,33 @@ export default function BookConfirm() {
   const service = mockServices.find(s => s.id === serviceId) ?? mockServices[0];
   const total = service.price * Number(people);
 
-  const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-  const dayNames = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  const dateObj = new Date(`${year}-${String(month).padStart(2,'0')}-${String(day).padStart(2,'0')}`);
-  const dateStr = `${dayNames[dateObj.getDay()]}, ${monthNames[Number(month)-1]} ${day}`;
+  const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const dateObj = new Date(`${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`);
+  const dateStr = `${dayNames[dateObj.getDay()]}, ${monthNames[Number(month) - 1]} ${day}`;
 
   const rows = [
-    { icon: 'location-outline', label: 'Studio', value: studio.name, sub: studio.address },
-    { icon: 'checkmark-circle-outline', label: 'Service', value: service.name, sub: service.duration },
-    { icon: 'people-outline', label: 'Number of People', value: `${people} Person${Number(people) > 1 ? 's' : ''}`, sub: '' },
-    { icon: 'calendar-outline', label: 'Date & Time', value: dateStr, sub: time },
+    { icon: 'location-outline' as const, label: 'Studio', value: studio.name, sub: studio.address },
+    { icon: 'checkmark-circle-outline' as const, label: 'Service', value: service.name, sub: service.duration },
+    { icon: 'people-outline' as const, label: 'Number of People', value: `${people} Person${Number(people) > 1 ? 's' : ''}`, sub: '' },
+    { icon: 'calendar-outline' as const, label: 'Date & Time', value: dateStr, sub: time as string },
   ];
 
   return (
     <SafeAreaView style={styles.safe}>
-      <Text style={styles.title}>Book Treatment</Text>
+      <View style={styles.header}>
+        <Text style={styles.title}>Book Treatment</Text>
+      </View>
       <StepperHeader currentStep={5} />
       <ScrollView contentContainerStyle={styles.scroll}>
-        <Card>
+        <View style={styles.card}>
           <Text style={styles.summaryTitle}>Booking Summary</Text>
           {rows.map(row => (
             <View key={row.label} style={styles.row}>
-              <Ionicons name={row.icon as any} size={20} color={Colors.subtle} style={styles.rowIcon} />
-              <View>
+              <View style={styles.iconCircle}>
+                <Ionicons name={row.icon} size={18} color={Colors.subtle} />
+              </View>
+              <View style={styles.rowContent}>
                 <Text style={styles.rowLabel}>{row.label}</Text>
                 <Text style={styles.rowValue}>{row.value}</Text>
                 {row.sub ? <Text style={styles.rowSub}>{row.sub}</Text> : null}
@@ -45,11 +48,24 @@ export default function BookConfirm() {
             </View>
           ))}
           <View style={styles.divider} />
-          <View style={styles.priceRow}><Text style={styles.priceLabel}>Service Price</Text><Text style={styles.priceVal}>€{service.price}</Text></View>
-          <View style={styles.priceRow}><Text style={styles.priceLabel}>Number of People</Text><Text style={styles.priceVal}>× {people}</Text></View>
-          <View style={styles.priceRow}><Text style={styles.totalLabel}>Total</Text><Text style={styles.totalVal}>€{total}</Text></View>
-        </Card>
-        <Button label="Confirm Booking" onPress={() => router.replace('/(tabs)')} style={styles.btn} />
+          <View style={styles.priceRow}>
+            <Text style={styles.priceLabel}>Service Price</Text>
+            <Text style={styles.priceVal}>€{service.price}</Text>
+          </View>
+          <View style={styles.priceRow}>
+            <Text style={styles.priceLabel}>Number of People</Text>
+            <Text style={styles.priceVal}>× {people}</Text>
+          </View>
+          <View style={styles.priceRow}>
+            <Text style={styles.totalLabel}>Total</Text>
+            <Text style={styles.totalVal}>€{total}</Text>
+          </View>
+        </View>
+        <Button
+          label="Confirm Booking"
+          onPress={() => router.replace('/(tabs)')}
+          style={styles.btn}
+        />
       </ScrollView>
     </SafeAreaView>
   );
@@ -57,13 +73,37 @@ export default function BookConfirm() {
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: Colors.background },
-  title: { fontSize: 24, fontWeight: '800', color: Colors.dark, paddingHorizontal: 20, paddingTop: 16 },
+  header: {
+    paddingHorizontal: 20,
+    paddingTop: 16,
+    paddingBottom: 0,
+  },
+  title: { fontSize: 24, fontWeight: '800', color: Colors.dark },
   scroll: { padding: 20 },
+  card: {
+    backgroundColor: '#fff',
+    borderRadius: 16,
+    padding: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.07,
+    shadowRadius: 10,
+    elevation: 3,
+  },
   summaryTitle: { fontSize: 18, fontWeight: '700', color: Colors.dark, marginBottom: 20 },
-  row: { flexDirection: 'row', alignItems: 'flex-start', marginBottom: 16 },
-  rowIcon: { marginRight: 12, marginTop: 2 },
+  row: { flexDirection: 'row', alignItems: 'flex-start', marginBottom: 18 },
+  iconCircle: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: '#F5F5F5',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 12,
+  },
+  rowContent: { flex: 1 },
   rowLabel: { fontSize: 12, color: Colors.subtle, marginBottom: 2 },
-  rowValue: { fontSize: 16, fontWeight: '700', color: Colors.dark },
+  rowValue: { fontSize: 15, fontWeight: '700', color: Colors.dark },
   rowSub: { fontSize: 13, color: Colors.medium, marginTop: 2 },
   divider: { height: 1, backgroundColor: Colors.border, marginVertical: 16 },
   priceRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 },

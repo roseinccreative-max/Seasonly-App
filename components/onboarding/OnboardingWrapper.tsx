@@ -25,8 +25,14 @@ export function OnboardingWrapper({ step, totalSteps, children }: Props) {
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: Colors.background },
-  header: { flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 24, paddingTop: 12, paddingBottom: 8 },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 24,
+    paddingTop: 16,
+    paddingBottom: 12,
+  },
   stepText: { color: Colors.subtle, fontSize: 13 },
-  percentText: { color: Colors.gold, fontSize: 13, fontWeight: '600' },
+  percentText: { color: Colors.gold, fontWeight: '600', fontSize: 13 },
   content: { flex: 1, paddingHorizontal: 24 },
 });

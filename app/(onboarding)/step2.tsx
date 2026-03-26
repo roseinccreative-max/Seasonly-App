@@ -13,22 +13,45 @@ export default function Step2() {
 
   return (
     <OnboardingWrapper step={2} totalSteps={5}>
-      <ScrollView showsVerticalScrollIndicator={false}>
+      <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1 }}>
         <Text style={styles.title}>How would you describe your skin?</Text>
-        <Text style={styles.subtitle}>Understanding your skin type helps us recommend the most effective facial exercises and techniques for you.</Text>
+        <Text style={styles.subtitle}>
+          Understanding your skin type helps us recommend the most effective facial exercises and techniques for you.
+        </Text>
         {skinTypes.map(type => (
-          <SkinTypeCard key={type.id} label={type.label} subtitle={type.subtitle} icon={type.icon}
-            selected={selected === type.id} onPress={() => setSelected(type.id)} />
+          <SkinTypeCard
+            key={type.id}
+            label={type.label}
+            subtitle={type.subtitle}
+            icon={type.icon}
+            selected={selected === type.id}
+            onPress={() => setSelected(type.id)}
+          />
         ))}
-        <Button label="Continue" onPress={() => router.push('/(onboarding)/step3')}
-          disabled={!selected} style={styles.btn} />
       </ScrollView>
+      <Button
+        label="Continue"
+        onPress={() => router.push('/(onboarding)/step3')}
+        disabled={!selected}
+        style={styles.btn}
+      />
     </OnboardingWrapper>
   );
 }
 
 const styles = StyleSheet.create({
-  title: { fontSize: 26, fontWeight: '700', color: Colors.dark, marginTop: 24, marginBottom: 10 },
-  subtitle: { fontSize: 14, color: Colors.medium, lineHeight: 20, marginBottom: 24 },
+  title: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: Colors.dark,
+    marginTop: 24,
+    marginBottom: 8,
+  },
+  subtitle: {
+    fontSize: 14,
+    color: Colors.medium,
+    lineHeight: 22,
+    marginBottom: 24,
+  },
   btn: { marginBottom: 24 },
 });

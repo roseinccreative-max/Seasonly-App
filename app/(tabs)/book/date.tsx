@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/Button';
 import { Colors } from '@/constants/colors';
 
 const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-const TIMES = ['09:00','09:30','10:00','10:30','11:00','11:30','12:00','12:30','13:00','13:30','14:00','14:30'];
+const TIMES = ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30'];
 
 function getDaysInMonth(year: number, month: number) {
   return new Date(year, month + 1, 0).getDate();
@@ -26,32 +26,63 @@ export default function BookDate() {
   const daysInMonth = getDaysInMonth(year, month);
   const monthName = new Date(year, month).toLocaleString('default', { month: 'long', year: 'numeric' });
 
-  const prevMonth = () => { if (month === 0) { setMonth(11); setYear(y => y - 1); } else setMonth(m => m - 1); };
-  const nextMonth = () => { if (month === 11) { setMonth(0); setYear(y => y + 1); } else setMonth(m => m + 1); };
+  const prevMonth = () => {
+    if (month === 0) { setMonth(11); setYear(y => y - 1); }
+    else setMonth(m => m - 1);
+  };
+  const nextMonth = () => {
+    if (month === 11) { setMonth(0); setYear(y => y + 1); }
+    else setMonth(m => m + 1);
+  };
 
   return (
     <SafeAreaView style={styles.safe}>
-      <Text style={styles.title}>Book Treatment</Text>
+      <View style={styles.header}>
+        <Text style={styles.title}>Book Treatment</Text>
+      </View>
       <StepperHeader currentStep={4} />
       <ScrollView contentContainerStyle={styles.scroll}>
         {/* Calendar */}
         <View style={styles.calCard}>
           <View style={styles.calHeader}>
-            <TouchableOpacity onPress={prevMonth}><Ionicons name="chevron-back" size={20} color={Colors.dark} /></TouchableOpacity>
+            <TouchableOpacity onPress={prevMonth}>
+              <Ionicons name="chevron-back" size={20} color={Colors.dark} />
+            </TouchableOpacity>
             <Text style={styles.monthLabel}>{monthName}</Text>
-            <TouchableOpacity onPress={nextMonth}><Ionicons name="chevron-forward" size={20} color={Colors.dark} /></TouchableOpacity>
+            <TouchableOpacity onPress={nextMonth}>
+              <Ionicons name="chevron-forward" size={20} color={Colors.dark} />
+            </TouchableOpacity>
           </View>
-          <View style={styles.dayRow}>{DAYS.map(d => <Text key={d} style={styles.dayLabel}>{d}</Text>)}</View>
+          <View style={styles.dayRow}>
+            {DAYS.map(d => (
+              <Text key={d} style={styles.dayLabel}>{d}</Text>
+            ))}
+          </View>
           <View style={styles.grid}>
-            {Array.from({ length: firstDayOfMonth }).map((_, i) => <View key={`e${i}`} style={styles.dayCell} />)}
+            {Array.from({ length: firstDayOfMonth }).map((_, i) => (
+              <View key={`e${i}`} style={styles.dayCell} />
+            ))}
             {Array.from({ length: daysInMonth }).map((_, i) => {
               const day = i + 1;
               const isToday = day === today.getDate() && month === today.getMonth() && year === today.getFullYear();
               const isSelected = day === selectedDay;
               return (
-                <TouchableOpacity key={day} style={[styles.dayCell, isToday && styles.todayCell, isSelected && styles.selectedCell]}
-                  onPress={() => setSelectedDay(day)}>
-                  <Text style={[styles.dayNum, isSelected && styles.selectedNum, isToday && !isSelected && styles.todayNum]}>{day}</Text>
+                <TouchableOpacity
+                  key={day}
+                  style={[
+                    styles.dayCell,
+                    isToday && !isSelected && styles.todayCell,
+                    isSelected && styles.selectedCell,
+                  ]}
+                  onPress={() => setSelectedDay(day)}
+                >
+                  <Text style={[
+                    styles.dayNum,
+                    isToday && !isSelected && styles.todayNum,
+                    isSelected && styles.selectedNum,
+                  ]}>
+                    {day}
+                  </Text>
                 </TouchableOpacity>
               );
             })}
@@ -64,8 +95,12 @@ export default function BookDate() {
             <Text style={styles.sectionTitle}>Select Time</Text>
             <View style={styles.timesGrid}>
               {TIMES.map(t => (
-                <TouchableOpacity key={t} style={[styles.timeSlot, selectedTime === t && styles.timeSlotActive]} onPress={() => setSelectedTime(t)}>
-                  <Ionicons name="time-outline" size={14} color={selectedTime === t ? '#fff' : Colors.dark} />
+                <TouchableOpacity
+                  key={t}
+                  style={[styles.timeSlot, selectedTime === t && styles.timeSlotActive]}
+                  onPress={() => setSelectedTime(t)}
+                >
+                  <Ionicons name="time-outline" size={14} color={selectedTime === t ? '#fff' : Colors.gold} />
                   <Text style={[styles.timeLabel, selectedTime === t && styles.timeLabelActive]}>{t}</Text>
                 </TouchableOpacity>
               ))}
@@ -74,7 +109,14 @@ export default function BookDate() {
         )}
 
         {selectedDay && selectedTime && (
-          <Button label="Continue" onPress={() => router.push({ pathname: '/(tabs)/book/confirm', params: { day: selectedDay, month: month + 1, year, time: selectedTime } })} style={styles.btn} />
+          <Button
+            label="Continue"
+            onPress={() => router.push({
+              pathname: '/(tabs)/book/confirm',
+              params: { day: selectedDay, month: month + 1, year, time: selectedTime },
+            })}
+            style={styles.btn}
+          />
         )}
       </ScrollView>
     </SafeAreaView>
@@ -83,10 +125,25 @@ export default function BookDate() {
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: Colors.background },
-  title: { fontSize: 24, fontWeight: '800', color: Colors.dark, paddingHorizontal: 20, paddingTop: 16 },
+  header: {
+    paddingHorizontal: 20,
+    paddingTop: 16,
+    paddingBottom: 0,
+  },
+  title: { fontSize: 24, fontWeight: '800', color: Colors.dark },
   scroll: { padding: 20 },
-  calCard: { backgroundColor: '#fff', borderRadius: 16, padding: 16, marginBottom: 24 },
-  calHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 },
+  calCard: {
+    backgroundColor: '#fff',
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 20,
+  },
+  calHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
   monthLabel: { fontSize: 17, fontWeight: '700', color: Colors.dark },
   dayRow: { flexDirection: 'row', marginBottom: 8 },
   dayLabel: { flex: 1, textAlign: 'center', fontSize: 12, color: Colors.subtle, fontWeight: '600' },
@@ -99,7 +156,20 @@ const styles = StyleSheet.create({
   selectedNum: { color: '#fff', fontWeight: '700' },
   sectionTitle: { fontSize: 18, fontWeight: '700', color: Colors.dark, marginBottom: 12 },
   timesGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10, marginBottom: 24 },
-  timeSlot: { width: '30%', backgroundColor: '#fff', borderRadius: 12, padding: 10, alignItems: 'center', flexDirection: 'row', gap: 6, shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.04, shadowRadius: 4, elevation: 1 },
+  timeSlot: {
+    width: '30%',
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 10,
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: 6,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.04,
+    shadowRadius: 4,
+    elevation: 1,
+  },
   timeSlotActive: { backgroundColor: Colors.primary },
   timeLabel: { fontSize: 13, fontWeight: '600', color: Colors.dark },
   timeLabelActive: { color: '#fff' },

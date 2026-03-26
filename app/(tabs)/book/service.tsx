@@ -10,19 +10,30 @@ export default function BookService() {
   const router = useRouter();
   return (
     <SafeAreaView style={styles.safe}>
-      <Text style={styles.title}>Book Treatment</Text>
+      <View style={styles.header}>
+        <Text style={styles.title}>Book Treatment</Text>
+      </View>
       <StepperHeader currentStep={2} />
       <ScrollView contentContainerStyle={styles.scroll}>
         {mockServices.map(service => (
-          <TouchableOpacity key={service.id} style={styles.card} activeOpacity={0.85}
-            onPress={() => router.push({ pathname: '/(tabs)/book/people', params: { serviceId: service.id } })}>
+          <TouchableOpacity
+            key={service.id}
+            style={styles.card}
+            activeOpacity={0.85}
+            onPress={() => router.push({ pathname: '/(tabs)/book/people', params: { serviceId: service.id } })}
+          >
             <View style={styles.info}>
               <Text style={styles.name}>{service.name}</Text>
               <Text style={styles.desc}>{service.description}</Text>
-              <Text style={styles.duration}>{service.duration}</Text>
-              <Text style={styles.price}>€{service.price}</Text>
+              <View style={styles.durationRow}>
+                <Ionicons name="time-outline" size={14} color={Colors.gold} />
+                <Text style={styles.duration}> {service.duration}</Text>
+              </View>
             </View>
-            <Ionicons name="chevron-forward" size={20} color={Colors.subtle} />
+            <View style={styles.right}>
+              <Text style={styles.price}>€{service.price}</Text>
+              <Ionicons name="chevron-forward" size={20} color={Colors.subtle} style={styles.chevron} />
+            </View>
           </TouchableOpacity>
         ))}
       </ScrollView>
@@ -32,12 +43,32 @@ export default function BookService() {
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: Colors.background },
-  title: { fontSize: 24, fontWeight: '800', color: Colors.dark, paddingHorizontal: 20, paddingTop: 16 },
+  header: {
+    paddingHorizontal: 20,
+    paddingTop: 16,
+    paddingBottom: 0,
+  },
+  title: { fontSize: 24, fontWeight: '800', color: Colors.dark },
   scroll: { padding: 20 },
-  card: { backgroundColor: '#fff', borderRadius: 16, padding: 16, marginBottom: 14, flexDirection: 'row', alignItems: 'center', shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.05, shadowRadius: 6, elevation: 2 },
+  card: {
+    backgroundColor: '#fff',
+    borderRadius: 16,
+    padding: 18,
+    marginBottom: 14,
+    flexDirection: 'row',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 8,
+    elevation: 2,
+  },
   info: { flex: 1 },
   name: { fontSize: 17, fontWeight: '700', color: Colors.dark, marginBottom: 4 },
-  desc: { fontSize: 13, color: Colors.medium, marginBottom: 6 },
-  duration: { fontSize: 13, color: Colors.gold, marginBottom: 6 },
-  price: { fontSize: 18, fontWeight: '700', color: Colors.dark },
+  desc: { fontSize: 13, color: Colors.medium, marginBottom: 6, lineHeight: 20 },
+  durationRow: { flexDirection: 'row', alignItems: 'center' },
+  duration: { fontSize: 13, color: Colors.gold, fontWeight: '600' },
+  right: { alignItems: 'flex-end' },
+  price: { fontSize: 22, fontWeight: '800', color: Colors.dark, textAlign: 'right' },
+  chevron: { marginTop: 4 },
 });

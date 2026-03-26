@@ -3,7 +3,6 @@ import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Button } from '@/components/ui/Button';
-import { Card } from '@/components/ui/Card';
 import { Colors } from '@/constants/colors';
 import { mockUser } from '@/constants/mockData';
 
@@ -18,22 +17,33 @@ export default function ProgramReady() {
   const router = useRouter();
   return (
     <SafeAreaView style={styles.safe}>
-      <ScrollView contentContainerStyle={styles.scroll}>
+      <ScrollView
+        contentContainerStyle={styles.scroll}
+        showsVerticalScrollIndicator={false}
+      >
         <Text style={styles.sparkle}>✦</Text>
         <Text style={styles.title}>{mockUser.name}, your personalized program is ready!</Text>
-        <Text style={styles.subtitle}>We've created a custom facial fitness plan based on your goals and AI analysis.</Text>
+        <Text style={styles.subtitle}>
+          We've created a custom facial fitness plan based on your goals and AI analysis.
+        </Text>
+
         {programItems.map(item => (
-          <Card key={item.label} style={styles.card}>
+          <View key={item.label} style={styles.card}>
             <View style={styles.iconBox}>
-              <Ionicons name={item.icon as any} size={20} color="#fff" />
+              <Ionicons name={item.icon as any} size={22} color="#fff" />
             </View>
-            <View>
+            <View style={styles.cardText}>
               <Text style={styles.itemLabel}>{item.label}</Text>
               <Text style={styles.itemValue}>{item.value}</Text>
             </View>
-          </Card>
+          </View>
         ))}
-        <Button label="Start My Program Now" onPress={() => router.push('/(onboarding)/welcome-modal')} style={styles.btn} />
+
+        <Button
+          label="Start My Program Now"
+          onPress={() => router.push('/(onboarding)/welcome-modal')}
+          style={styles.btn}
+        />
       </ScrollView>
     </SafeAreaView>
   );
@@ -42,12 +52,47 @@ export default function ProgramReady() {
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: Colors.background },
   scroll: { padding: 24 },
-  sparkle: { color: Colors.gold, fontSize: 20, marginBottom: 8 },
-  title: { fontSize: 28, fontWeight: '800', color: Colors.dark, marginBottom: 10 },
-  subtitle: { fontSize: 14, color: Colors.medium, lineHeight: 20, marginBottom: 24 },
-  card: { flexDirection: 'row', alignItems: 'center', marginBottom: 12 },
-  iconBox: { width: 44, height: 44, borderRadius: 12, backgroundColor: Colors.primary, alignItems: 'center', justifyContent: 'center', marginRight: 14 },
-  itemLabel: { fontSize: 12, color: Colors.subtle },
+  sparkle: {
+    color: Colors.gold,
+    fontSize: 32,
+    marginBottom: 8,
+  },
+  title: {
+    fontSize: 26,
+    fontWeight: '800',
+    color: Colors.dark,
+    marginBottom: 10,
+  },
+  subtitle: {
+    fontSize: 14,
+    color: Colors.medium,
+    lineHeight: 22,
+    marginBottom: 28,
+  },
+  card: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 6,
+    elevation: 2,
+  },
+  iconBox: {
+    width: 48,
+    height: 48,
+    borderRadius: 14,
+    backgroundColor: Colors.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 14,
+  },
+  cardText: { flex: 1 },
+  itemLabel: { fontSize: 12, color: Colors.subtle, marginBottom: 2 },
   itemValue: { fontSize: 16, fontWeight: '700', color: Colors.dark },
-  btn: { marginTop: 8 },
+  btn: { marginTop: 8, marginBottom: 24 },
 });
