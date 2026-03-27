@@ -1,4 +1,4 @@
-import { ScrollView, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { ScrollView, View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -9,7 +9,7 @@ const quickActions = [
   { label: 'Book Massage', icon: 'calendar-outline' as const, route: '/(tabs)/book' },
   { label: 'Daily Challenge', icon: 'flash-outline' as const, route: '/(tabs)/rewards' },
   { label: 'Shop', icon: 'bag-outline' as const, route: '/(tabs)/shop' },
-  { label: 'Borrow Device', icon: 'phone-portrait-outline' as const, route: null },
+  { label: 'Borrow Device', icon: 'phone-portrait-outline' as const, route: '/(tabs)/book' },
 ];
 
 export default function HomeScreen() {
@@ -47,7 +47,7 @@ export default function HomeScreen() {
         </View>
 
         {/* Daily Wellness Tip */}
-        <View style={styles.tipCard}>
+        <TouchableOpacity style={styles.tipCard} onPress={() => router.push('/(tabs)/rewards')} activeOpacity={0.85}>
           <View style={styles.tipHeader}>
             <View style={styles.tipLeft}>
               <Ionicons name="book-outline" size={16} color={Colors.purple} />
@@ -62,7 +62,7 @@ export default function HomeScreen() {
             Start your day with this simple yet powerful hydration ritual for glowing skin.
           </Text>
           <Text style={styles.tipCta}>Tap to read & earn 10 points →</Text>
-        </View>
+        </TouchableOpacity>
 
         {/* Quick Actions */}
         <Text style={styles.sectionTitle}>Quick Actions</Text>
@@ -71,7 +71,7 @@ export default function HomeScreen() {
             <TouchableOpacity
               key={action.label}
               style={styles.actionCard}
-              onPress={() => action.route && router.push(action.route as any)}
+              onPress={() => router.push(action.route as any)}
               activeOpacity={0.8}
             >
               <Ionicons name={action.icon} size={28} color={Colors.primary} />

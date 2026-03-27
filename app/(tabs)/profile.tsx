@@ -1,4 +1,4 @@
-import { ScrollView, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { ScrollView, View, Text, TouchableOpacity, StyleSheet, Alert, Linking } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '@/constants/colors';
@@ -22,7 +22,10 @@ export default function ProfileScreen() {
           </View>
           <Text style={styles.detail}>{mockUser.email}</Text>
           <Text style={styles.detail}>{mockUser.phone}</Text>
-          <TouchableOpacity style={styles.editBtn}>
+          <TouchableOpacity
+            style={styles.editBtn}
+            onPress={() => Alert.alert('Edit Profile', 'Profile editing coming soon!')}
+          >
             <Ionicons name="pencil-outline" size={15} color={Colors.primary} />
             <Text style={styles.editText}>Edit Profile</Text>
           </TouchableOpacity>
@@ -36,10 +39,16 @@ export default function ProfileScreen() {
           </View>
           <Text style={styles.memberSub}>Active until {mockUser.membershipExpiry}</Text>
           <View style={styles.memberBtns}>
-            <TouchableOpacity style={styles.manageBtn}>
+            <TouchableOpacity
+              style={styles.manageBtn}
+              onPress={() => Linking.openURL('https://seasonly.fr/account')}
+            >
               <Text style={styles.manageBtnText}>Manage</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.upgradeBtn}>
+            <TouchableOpacity
+              style={styles.upgradeBtn}
+              onPress={() => Linking.openURL('https://seasonly.fr/collections/abonnements')}
+            >
               <Text style={styles.upgradeBtnText}>Upgrade</Text>
             </TouchableOpacity>
           </View>

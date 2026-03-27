@@ -6,9 +6,25 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "plugins": [
       "expo-router"
-    ]
+    ],
+    "android": {
+      "package": "com.seasonly.app",
+      "versionCode": 1
+    },
+    "ios": {
+      "bundleIdentifier": "com.seasonly.app"
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "ee45223a-9986-4984-8d6b-853ee6651bd0"
+      }
+    },
+    "owner": "troymojicaa"
   }
 }

@@ -1,16 +1,25 @@
-import { ScrollView, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { ScrollView, View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import { useRef } from 'react';
 import { Colors } from '@/constants/colors';
 import { mockUser, mockRoutines, mockRedeemItems } from '@/constants/mockData';
 
+const HOW_TO_EARN = [
+  'Complete daily self-massage routines',
+  'Read Tip To Glow',
+  'Book and attend appointments',
+  'Leave reviews on Google',
+];
+
 export default function RewardsScreen() {
+  const scrollRef = useRef<ScrollView>(null);
   const completedCount = mockRoutines.filter(r => r.completed).length;
   const total = mockRoutines.length;
 
   return (
     <SafeAreaView style={styles.safe}>
-      <ScrollView contentContainerStyle={styles.scroll}>
+      <ScrollView ref={scrollRef} contentContainerStyle={styles.scroll}>
         <Text style={styles.title}>Rewards & Challenges</Text>
         <Text style={styles.subtitle}>Complete challenges to earn Skin Miles</Text>
 
@@ -44,7 +53,7 @@ export default function RewardsScreen() {
         {/* Self-Massage Routines */}
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>Self-Massage Routines</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => scrollRef.current?.scrollToEnd({ animated: true })}>
             <Text style={styles.seeAll}>See All</Text>
           </TouchableOpacity>
         </View>
@@ -73,17 +82,47 @@ export default function RewardsScreen() {
           </View>
         ))}
 
-        {/* Redeem */}
+        {/* Redeem Your Points */}
         <Text style={styles.redeemTitle}>Redeem Your Points</Text>
-        <View style={styles.redeemRow}>
-          {mockRedeemItems.map(item => (
-            <View key={item.id} style={styles.redeemCard}>
-              <Text style={styles.redeemEmoji}>{item.icon}</Text>
-              <Text style={styles.redeemName}>{item.name}</Text>
-              <Text style={styles.redeemPoints}>{item.points} pts</Text>
-              <TouchableOpacity style={styles.redeemBtn}>
-                <Text style={styles.redeemBtnText}>Redeem</Text>
-              </TouchableOpacity>
+        <View style={styles.redeemGrid}>
+          {mockRedeemItems.map(item => {
+            const unlocked = mockUser.skinMiles >= item.points;
+            return (
+              <View key={item.id} style={styles.redeemCard}>
+                <Text style={styles.redeemEmoji}>{item.icon}</Text>
+                <Text style={styles.redeemName}>{item.name}</Text>
+                <View style={styles.redeemPtsRow}>
+                  <Ionicons name="trophy-outline" size={12} color={Colors.gold} />
+                  <Text style={styles.redeemPts}> {item.points} pts</Text>
+                </View>
+                {unlocked ? (
+                  <TouchableOpacity
+                    style={styles.redeemBtn}
+                    onPress={() => Alert.alert('Redeem Points', `Redeem ${item.points} pts for "${item.name}"?`, [
+                      { text: 'Cancel', style: 'cancel' },
+                      { text: 'Confirm', onPress: () => Alert.alert('Success!', `Your "${item.name}" reward is on its way. Check your email.`) },
+                    ])}
+                  >
+                    <Text style={styles.redeemBtnText}>Redeem</Text>
+                  </TouchableOpacity>
+                ) : (
+                  <View style={styles.lockedBtn}>
+                    <Ionicons name="lock-closed-outline" size={13} color={Colors.subtle} style={{ marginRight: 4 }} />
+                    <Text style={styles.lockedBtnText}>Locked</Text>
+                  </View>
+                )}
+              </View>
+            );
+          })}
+        </View>
+
+        {/* How to Earn Points */}
+        <View style={styles.howToCard}>
+          <Text style={styles.howToTitle}>How to Earn Points</Text>
+          {HOW_TO_EARN.map((item, i) => (
+            <View key={i} style={styles.howToRow}>
+              <Text style={styles.howToBullet}>·</Text>
+              <Text style={styles.howToText}>{item}</Text>
             </View>
           ))}
         </View>
@@ -129,11 +168,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     overflow: 'hidden',
   },
-  progressFill: {
-    height: 8,
-    backgroundColor: Colors.primary,
-    borderRadius: 4,
-  },
+  progressFill: { height: 8, backgroundColor: Colors.primary, borderRadius: 4 },
   progressHint: { fontSize: 13, color: Colors.medium },
   sectionHeader: {
     flexDirection: 'row',
@@ -171,13 +206,18 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   completedText: { color: Colors.green, fontWeight: '600', fontSize: 12 },
-  redeemTitle: { fontSize: 18, fontWeight: '700', color: Colors.dark, marginBottom: 12, marginTop: 8 },
-  redeemRow: { flexDirection: 'row', gap: 12 },
+  redeemTitle: { fontSize: 18, fontWeight: '700', color: Colors.dark, marginBottom: 14, marginTop: 8 },
+  redeemGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 12,
+    marginBottom: 20,
+  },
   redeemCard: {
-    flex: 1,
+    width: '47%',
     backgroundColor: '#fff',
     borderRadius: 16,
-    padding: 20,
+    padding: 18,
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -186,15 +226,38 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   redeemEmoji: { fontSize: 32, marginBottom: 10 },
-  redeemName: { fontSize: 13, fontWeight: '600', color: Colors.dark, textAlign: 'center' },
-  redeemPoints: { fontSize: 12, color: Colors.subtle, marginTop: 4 },
+  redeemName: { fontSize: 13, fontWeight: '700', color: Colors.dark, textAlign: 'center', marginBottom: 6 },
+  redeemPtsRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 14 },
+  redeemPts: { fontSize: 12, color: Colors.gold, fontWeight: '600' },
   redeemBtn: {
-    borderWidth: 1,
-    borderColor: Colors.primary,
+    backgroundColor: Colors.primary,
     borderRadius: 20,
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    marginTop: 12,
+    paddingVertical: 9,
+    paddingHorizontal: 24,
+    alignSelf: 'stretch',
+    alignItems: 'center',
   },
-  redeemBtnText: { color: Colors.primary, fontWeight: '600', fontSize: 13 },
+  redeemBtnText: { color: '#fff', fontWeight: '700', fontSize: 13 },
+  lockedBtn: {
+    backgroundColor: '#F0EBE6',
+    borderRadius: 20,
+    paddingVertical: 9,
+    paddingHorizontal: 24,
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'stretch',
+    justifyContent: 'center',
+  },
+  lockedBtnText: { color: Colors.subtle, fontWeight: '600', fontSize: 13 },
+  howToCard: {
+    backgroundColor: '#FFF8F0',
+    borderRadius: 16,
+    padding: 18,
+    borderWidth: 1,
+    borderColor: '#F2E8DC',
+  },
+  howToTitle: { fontSize: 15, fontWeight: '700', color: Colors.dark, marginBottom: 12 },
+  howToRow: { flexDirection: 'row', alignItems: 'flex-start', marginBottom: 8 },
+  howToBullet: { fontSize: 16, color: Colors.primary, marginRight: 8, lineHeight: 20 },
+  howToText: { fontSize: 13, color: Colors.primary, flex: 1, lineHeight: 20 },
 });

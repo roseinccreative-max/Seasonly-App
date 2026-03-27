@@ -3,20 +3,26 @@ import { ScrollView, View, Text, TextInput, TouchableOpacity, Image, StyleSheet 
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
 import { Colors } from '@/constants/colors';
-import { mockProducts, mockUser } from '@/constants/mockData';
-
-const CATEGORIES = ['All', 'Serums', 'Creams', 'Oils', 'Tools'];
+import { products, productCategories, Product } from '@/constants/products';
+import { mockUser } from '@/constants/mockData';
+import { useCartStore } from '@/store/cartStore';
 
 export default function ShopScreen() {
+  const router = useRouter();
   const [category, setCategory] = useState('All');
   const [search, setSearch] = useState('');
+  const totalItems = useCartStore(s => s.totalItems);
 
-  const filtered = mockProducts.filter(p =>
+  const filtered = products.filter(p =>
     (category === 'All' || p.category === category) &&
-    p.name.toLowerCase().includes(search.toLowerCase())
+    p.title.toLowerCase().includes(search.toLowerCase())
   );
-  const bestSellers = filtered.filter(p => p.isBestSeller);
+
+  const bestSellers = products.filter(p =>
+    p.description.toLowerCase().includes('best seller')
+  ).slice(0, 4);
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -24,7 +30,14 @@ export default function ShopScreen() {
         {/* Header */}
         <View style={styles.header}>
           <Text style={styles.title}>Shop</Text>
-          <Ionicons name="bag-outline" size={24} color={Colors.dark} />
+          <TouchableOpacity style={styles.cartIconBtn} onPress={() => router.push('/(tabs)/shop/cart')}>
+            <Ionicons name="bag-outline" size={24} color={Colors.dark} />
+            {totalItems() > 0 && (
+              <View style={styles.cartBadge}>
+                <Text style={styles.cartBadgeText}>{totalItems()}</Text>
+              </View>
+            )}
+          </TouchableOpacity>
         </View>
 
         {/* Search */}
@@ -41,7 +54,7 @@ export default function ShopScreen() {
 
         {/* Categories */}
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.catsScroll} contentContainerStyle={styles.catsContent}>
-          {CATEGORIES.map(cat => (
+          {productCategories.map(cat => (
             <TouchableOpacity
               key={cat}
               style={[styles.catPill, category === cat && styles.catActive]}
@@ -66,58 +79,71 @@ export default function ShopScreen() {
               <Text style={styles.milesNum}>{mockUser.skinMiles.toLocaleString()}</Text>
             </View>
           </View>
-          <TouchableOpacity style={styles.useBtn}>
+          <TouchableOpacity style={styles.useBtn} onPress={() => router.push('/(tabs)/rewards')}>
             <Text style={styles.useBtnText}>Use Points</Text>
           </TouchableOpacity>
         </LinearGradient>
 
         {/* Best Sellers */}
-        {bestSellers.length > 0 && (
+        {search === '' && category === 'All' && bestSellers.length > 0 && (
           <>
             <View style={styles.sectionHeader}>
               <Text style={styles.sectionTitle}>Best Sellers</Text>
-              <TouchableOpacity>
-                <Text style={styles.seeAll}>See All</Text>
-              </TouchableOpacity>
             </View>
             <View style={styles.grid}>
-              {bestSellers.map(p => <ProductCard key={p.id} product={p} />)}
+              {bestSellers.map(p => (
+                <ProductCard key={p.id} product={p} onPress={() => router.push(`/(tabs)/shop/${p.id}`)} />
+              ))}
             </View>
           </>
         )}
 
-        {/* All Products */}
+        {/* Product Grid */}
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>All Products</Text>
+          <Text style={styles.sectionTitle}>
+            {category === 'All' ? 'All Products' : category} ({filtered.length})
+          </Text>
         </View>
         <View style={styles.grid}>
-          {filtered.map(p => <ProductCard key={p.id} product={p} />)}
+          {filtered.map(p => (
+            <ProductCard key={p.id} product={p} onPress={() => router.push(`/(tabs)/shop/${p.id}`)} />
+          ))}
         </View>
       </ScrollView>
     </SafeAreaView>
   );
 }
 
-function ProductCard({ product }: { product: typeof mockProducts[0] }) {
+function ProductCard({ product, onPress }: { product: Product; onPress: () => void }) {
+  const isBestSeller = product.description.toLowerCase().includes('best seller');
+  const isNew = product.description.toLowerCase().startsWith('new.');
+  const isOutOfStock = product.description.toLowerCase().includes('out of stock');
+
   return (
-    <View style={pcStyles.card}>
+    <TouchableOpacity style={pcStyles.card} onPress={onPress} activeOpacity={0.85}>
       <View style={pcStyles.imageBox}>
-        <Image source={{ uri: product.image }} style={pcStyles.image} />
-        {product.isBestSeller && (
-          <View style={pcStyles.badge}>
+        <Image source={{ uri: product.imageUrl }} style={pcStyles.image} resizeMode="contain" />
+        {isBestSeller && (
+          <View style={[pcStyles.badge, { backgroundColor: Colors.orange }]}>
             <Text style={pcStyles.badgeText}>Best Seller</Text>
+          </View>
+        )}
+        {isNew && !isBestSeller && (
+          <View style={[pcStyles.badge, { backgroundColor: Colors.green }]}>
+            <Text style={pcStyles.badgeText}>New</Text>
+          </View>
+        )}
+        {isOutOfStock && (
+          <View style={[pcStyles.badge, { backgroundColor: '#999' }]}>
+            <Text style={pcStyles.badgeText}>Out of Stock</Text>
           </View>
         )}
       </View>
       <View style={pcStyles.info}>
-        <Text style={pcStyles.name}>{product.name}</Text>
-        <View style={pcStyles.ratingRow}>
-          <Ionicons name="star" size={13} color={Colors.gold} />
-          <Text style={pcStyles.rating}> {product.rating}</Text>
-        </View>
-        <Text style={pcStyles.price}>€{product.price}</Text>
+        <Text style={pcStyles.name} numberOfLines={2}>{product.title}</Text>
+        <Text style={pcStyles.subtitle} numberOfLines={1}>{product.subtitle}</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }
 
@@ -182,8 +208,21 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   sectionTitle: { fontSize: 18, fontWeight: '700', color: Colors.dark },
-  seeAll: { color: Colors.gold, fontSize: 13, fontWeight: '600' },
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 14, marginBottom: 24 },
+  cartIconBtn: { position: 'relative', padding: 4 },
+  cartBadge: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    backgroundColor: Colors.primary,
+    borderRadius: 8,
+    minWidth: 16,
+    height: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 3,
+  },
+  cartBadgeText: { color: '#fff', fontSize: 10, fontWeight: '700' },
 });
 
 const pcStyles = StyleSheet.create({
@@ -198,21 +237,18 @@ const pcStyles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 2,
   },
-  imageBox: { position: 'relative' },
-  image: { width: '100%', height: 150 },
+  imageBox: { position: 'relative', backgroundColor: '#F9F5F2' },
+  image: { width: '100%', height: 160 },
   badge: {
     position: 'absolute',
     top: 8,
-    right: 8,
-    backgroundColor: Colors.orange,
+    left: 8,
     borderRadius: 10,
     paddingHorizontal: 8,
     paddingVertical: 3,
   },
   badgeText: { color: '#fff', fontSize: 10, fontWeight: '700' },
   info: { padding: 12 },
-  name: { fontSize: 13, fontWeight: '700', color: Colors.dark, marginBottom: 4 },
-  ratingRow: { flexDirection: 'row', alignItems: 'center' },
-  rating: { fontSize: 12, color: Colors.dark },
-  price: { fontSize: 15, fontWeight: '700', color: Colors.gold, marginTop: 4 },
+  name: { fontSize: 13, fontWeight: '700', color: Colors.dark, marginBottom: 3 },
+  subtitle: { fontSize: 11, color: Colors.subtle },
 });

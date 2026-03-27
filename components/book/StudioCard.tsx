@@ -2,7 +2,7 @@ import { TouchableOpacity, View, Text, Image, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '@/constants/colors';
 
-type Studio = { id: string; name: string; address: string; phone: string; email: string; image: string };
+type Studio = { id: string; name: string; address: string; phone: string; hours: string; image: string };
 type Props = { studio: Studio; onPress: () => void };
 
 export function StudioCard({ studio, onPress }: Props) {
@@ -20,8 +20,8 @@ export function StudioCard({ studio, onPress }: Props) {
           <Text style={styles.detail}>{studio.phone}</Text>
         </View>
         <View style={styles.row}>
-          <Ionicons name="mail-outline" size={15} color={Colors.gold} />
-          <Text style={styles.detail}>{studio.email}</Text>
+          <Ionicons name="time-outline" size={15} color={Colors.gold} />
+          <Text style={styles.detail}>{studio.hours}</Text>
         </View>
         <Text style={styles.selectText}>Select Studio →</Text>
       </View>

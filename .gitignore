@@ -39,3 +39,8 @@ yarn-error.*
 # generated native folders
 /ios
 /android
+
+# Claude & Superpowers internal
+.claude/
+.superpowers/
+scripts/generate-products.js
