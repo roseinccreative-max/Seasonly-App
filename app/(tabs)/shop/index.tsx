@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { ScrollView, View, Text, TextInput, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { Colors } from '@/constants/colors';
 import { products, productCategories, Product } from '@/constants/products';
@@ -58,14 +57,9 @@ export default function ShopScreen() {
         </ScrollView>
 
         {/* Skin Miles banner */}
-        <LinearGradient
-          colors={['#7C6FAE', '#9B8FD0']}
-          style={styles.milesBanner}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
-        >
+        <View style={styles.milesBanner}>
           <View style={styles.milesLeft}>
-            <Ionicons name="trophy-outline" size={22} color="#fff" />
+            <Ionicons name="trophy-outline" size={22} color={Colors.dark} />
             <View style={{ marginLeft: 10 }}>
               <Text style={styles.milesLabel}>Your Skin Miles</Text>
               <Text style={styles.milesNum}>{mockUser.skinMiles.toLocaleString()}</Text>
@@ -74,7 +68,7 @@ export default function ShopScreen() {
           <TouchableOpacity style={styles.useBtn} onPress={() => router.push('/(tabs)/rewards')}>
             <Text style={styles.useBtnText}>Use Points</Text>
           </TouchableOpacity>
-        </LinearGradient>
+        </View>
 
         {/* Best Sellers */}
         {search === '' && category === 'All' && bestSellers.length > 0 && (
@@ -176,23 +170,31 @@ const styles = StyleSheet.create({
   catLabel: { fontSize: 13, color: Colors.medium, fontWeight: '600' },
   catLabelActive: { color: '#fff' },
   milesBanner: {
+    backgroundColor: '#fff',
     borderRadius: 16,
     padding: 18,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 24,
+    borderWidth: 1,
+    borderColor: Colors.border,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    elevation: 2,
   },
   milesLeft: { flexDirection: 'row', alignItems: 'center' },
-  milesLabel: { color: 'rgba(255,255,255,0.8)', fontSize: 12 },
-  milesNum: { color: '#fff', fontSize: 22, fontWeight: '800' },
+  milesLabel: { color: Colors.subtle, fontSize: 12 },
+  milesNum: { color: Colors.dark, fontSize: 22, fontWeight: '800' },
   useBtn: {
-    backgroundColor: '#fff',
+    backgroundColor: Colors.dark,
     borderRadius: 20,
     paddingHorizontal: 18,
     paddingVertical: 9,
   },
-  useBtnText: { color: Colors.purple, fontWeight: '700', fontSize: 13 },
+  useBtnText: { color: '#fff', fontWeight: '700', fontSize: 13 },
   sectionHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
