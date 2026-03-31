@@ -184,7 +184,7 @@ export default function ProfileScreen() {
         <Text style={styles.sectionTitle}>{t('profile_skin_analysis')}</Text>
         <View style={styles.skinCard}>
           <View style={styles.skinHeader}>
-            <Ionicons name="sparkles-outline" size={18} color={Colors.purple} />
+            <Ionicons name="sparkles-outline" size={18} color={Colors.dark} />
             <Text style={styles.skinTitle}> {t('profile_skin_profile')}</Text>
           </View>
           <Text style={styles.skinDate}>Diagnostic performed on {mockUser.skinDiagnosticDate}</Text>
@@ -433,7 +433,19 @@ const styles = StyleSheet.create({
   upgradeBtn: { flex: 1, backgroundColor: '#fff', borderRadius: 22, paddingVertical: 11, alignItems: 'center' },
   upgradeBtnText: { color: Colors.primary, fontWeight: '700' },
   sectionTitle: { fontSize: 18, fontWeight: '700', color: Colors.dark, marginBottom: 12 },
-  skinCard: { backgroundColor: '#EDE9F7', borderRadius: 16, padding: 16, marginBottom: 20 },
+  skinCard: {
+    backgroundColor: '#fff',
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    elevation: 2,
+    borderWidth: 1,
+    borderColor: Colors.border,
+  },
   skinHeader: { flexDirection: 'row', alignItems: 'center', marginBottom: 6 },
   skinTitle: { fontSize: 16, fontWeight: '700', color: Colors.dark },
   skinDate: { fontSize: 12, color: Colors.subtle, marginBottom: 16 },
