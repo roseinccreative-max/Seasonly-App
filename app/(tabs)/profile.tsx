@@ -3,8 +3,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '@/constants/colors';
 import { mockUser } from '@/constants/mockData';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function ProfileScreen() {
+  const { lang, setLang, t } = useLanguage();
   return (
     <SafeAreaView style={styles.safe}>
       <ScrollView contentContainerStyle={styles.scroll}>
@@ -75,6 +77,25 @@ export default function ProfileScreen() {
                 </View>
               ))}
             </View>
+          </View>
+        </View>
+
+        {/* Language Toggle */}
+        <View style={styles.langSection}>
+          <Text style={styles.langLabel}>{t('profile_language')}</Text>
+          <View style={styles.langToggle}>
+            <TouchableOpacity
+              style={[styles.langBtn, lang === 'en' && styles.langBtnActive]}
+              onPress={() => setLang('en')}
+            >
+              <Text style={[styles.langBtnText, lang === 'en' && styles.langBtnTextActive]}>EN</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.langBtn, lang === 'fr' && styles.langBtnActive]}
+              onPress={() => setLang('fr')}
+            >
+              <Text style={[styles.langBtnText, lang === 'fr' && styles.langBtnTextActive]}>FR</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
@@ -166,4 +187,11 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
   },
   tagText: { color: '#fff', fontSize: 13, fontWeight: '600' },
+  langSection: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 24, marginBottom: 8 },
+  langLabel: { fontSize: 15, fontWeight: '600', color: Colors.dark },
+  langToggle: { flexDirection: 'row', backgroundColor: '#F0EBE6', borderRadius: 20, padding: 3 },
+  langBtn: { paddingHorizontal: 18, paddingVertical: 7, borderRadius: 17 },
+  langBtnActive: { backgroundColor: Colors.primary },
+  langBtnText: { fontWeight: '700', fontSize: 13, color: Colors.medium },
+  langBtnTextActive: { color: '#fff' },
 });

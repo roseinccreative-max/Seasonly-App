@@ -2,6 +2,7 @@ import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { Platform } from 'react-native';
 import { Colors } from '@/constants/colors';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const isWeb = Platform.OS === 'web';
 const isIOS = Platform.OS === 'ios';
@@ -13,6 +14,7 @@ function TabIcon({ focused, name, activeName, color }: { focused: boolean; name:
 }
 
 export default function TabLayout() {
+  const { t } = useLanguage();
   return (
     <Tabs
       screenOptions={{
@@ -42,7 +44,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
+          title: t('tab_home'),
           tabBarIcon: ({ color, focused }) => (
             <TabIcon focused={focused} name="home-outline" activeName="home" color={color} />
           ),
@@ -51,7 +53,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="book"
         options={{
-          title: 'Book',
+          title: t('tab_book'),
           tabBarIcon: ({ color, focused }) => (
             <TabIcon focused={focused} name="calendar-outline" activeName="calendar" color={color} />
           ),
@@ -60,7 +62,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="rewards"
         options={{
-          title: 'Rewards',
+          title: t('tab_rewards'),
           tabBarIcon: ({ color, focused }) => (
             <TabIcon focused={focused} name="star-outline" activeName="star" color={color} />
           ),
@@ -69,7 +71,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="shop"
         options={{
-          title: 'Shop',
+          title: t('tab_shop'),
           tabBarIcon: ({ color, focused }) => (
             <TabIcon focused={focused} name="bag-outline" activeName="bag" color={color} />
           ),
@@ -78,7 +80,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="profile"
         options={{
-          title: 'Profile',
+          title: t('tab_profile'),
           tabBarIcon: ({ color, focused }) => (
             <TabIcon focused={focused} name="person-outline" activeName="person" color={color} />
           ),
