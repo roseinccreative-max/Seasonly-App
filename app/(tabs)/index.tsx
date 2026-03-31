@@ -58,7 +58,7 @@ export default function HomeScreen() {
         </View>
 
         {/* Daily Wellness Tip */}
-        <TouchableOpacity style={styles.tipCard} onPress={() => router.push({ pathname: '/(tabs)/tip/[id]', params: { id: todayTip.id } })} activeOpacity={0.85}>
+        <TouchableOpacity style={styles.tipCard} onPress={() => router.push({ pathname: '/(screens)/tip-detail', params: { id: todayTip.id } })} activeOpacity={0.85}>
           <View style={styles.tipHeader}>
             <View style={styles.tipLeft}>
               <Ionicons name="book-outline" size={16} color={Colors.purple} />
@@ -94,7 +94,7 @@ export default function HomeScreen() {
         {/* Education — The Seasonly Method */}
         <View style={styles.educationHeader}>
           <Text style={styles.sectionTitle}>The Seasonly Method</Text>
-          <TouchableOpacity onPress={() => router.push({ pathname: '/(tabs)/concept/[id]', params: { id: '1' } })}>
+          <TouchableOpacity onPress={() => router.push({ pathname: '/(screens)/concept-detail', params: { id: '1' } })}>
             <Text style={styles.seeAllText}>See all</Text>
           </TouchableOpacity>
         </View>
@@ -104,7 +104,7 @@ export default function HomeScreen() {
             <TouchableOpacity
               key={card.id}
               style={[styles.conceptCard, { backgroundColor: card.color }]}
-              onPress={() => router.push({ pathname: '/(tabs)/concept/[id]', params: { id: card.id } })}
+              onPress={() => router.push({ pathname: '/(screens)/concept-detail', params: { id: card.id } })}
               activeOpacity={0.85}
             >
               <Text style={styles.conceptEmoji}>{card.icon}</Text>
