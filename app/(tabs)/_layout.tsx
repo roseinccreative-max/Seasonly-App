@@ -86,8 +86,8 @@ export default function TabLayout() {
           ),
         }}
       />
-      <Tabs.Screen name="tip" options={{ href: null }} />
-      <Tabs.Screen name="concept" options={{ href: null }} />
+      <Tabs.Screen name="tip" options={{ tabBarButton: () => null, tabBarStyle: { display: 'none' } }} />
+      <Tabs.Screen name="concept" options={{ tabBarButton: () => null, tabBarStyle: { display: 'none' } }} />
     </Tabs>
   );
 }
