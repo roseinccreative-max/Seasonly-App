@@ -7,11 +7,11 @@ import { mockUser } from '@/constants/mockData';
 import { tips } from '@/constants/tips';
 import { useLanguage } from '@/contexts/LanguageContext';
 
-const quickActions = [
-  { label: 'Book Massage', icon: 'calendar-outline' as const, route: '/(tabs)/book' },
-  { label: 'Daily Challenge', icon: 'flash-outline' as const, route: '/(tabs)/rewards' },
-  { label: 'Shop', icon: 'bag-outline' as const, route: '/(tabs)/shop' },
-  { label: 'Borrow Device', icon: 'phone-portrait-outline' as const, route: '/(tabs)/book' },
+const quickActionDefs = [
+  { key: 'home_book_massage', icon: 'calendar-outline' as const, route: '/(tabs)/book' },
+  { key: 'home_daily_challenge', icon: 'flash-outline' as const, route: '/(tabs)/rewards' },
+  { key: 'home_shop', icon: 'bag-outline' as const, route: '/(tabs)/shop' },
+  { key: 'home_borrow_device', icon: 'phone-portrait-outline' as const, route: '/(tabs)/book' },
 ];
 
 export default function HomeScreen() {
@@ -19,14 +19,15 @@ export default function HomeScreen() {
   const { lang, t } = useLanguage();
   const todayTip = tips[0];
   const tipTitle = lang === 'fr' ? todayTip.titleFr : todayTip.titleEn;
+  const quickActions = quickActionDefs.map(a => ({ ...a, label: t(a.key) }));
   return (
     <SafeAreaView style={styles.safe}>
       <ScrollView contentContainerStyle={styles.scroll}>
         {/* Header */}
         <View style={styles.headerRow}>
           <View>
-            <Text style={styles.greeting}>Welcome back, {mockUser.name}</Text>
-            <Text style={styles.sub}>Let's take care of your skin today</Text>
+            <Text style={styles.greeting}>{t('home_greeting')}, {mockUser.name}</Text>
+            <Text style={styles.sub}>{t('home_subtitle')}</Text>
           </View>
           <View style={styles.proBadge}>
             <Text style={styles.proText}>👑 Pro</Text>
@@ -40,14 +41,14 @@ export default function HomeScreen() {
               <Text style={styles.streakEmoji}>🔥</Text>
               <Text style={styles.streakNum}> {mockUser.streak}</Text>
             </View>
-            <Text style={styles.streakLabel}>Day Streak</Text>
+            <Text style={styles.streakLabel}>{t('home_day_streak')}</Text>
           </View>
           <View style={styles.streakRight}>
             <View style={styles.milesNumRow}>
               <Text style={styles.milesNum}>{mockUser.skinMiles.toLocaleString()}</Text>
               <Text style={styles.milesEmoji}> 🏆</Text>
             </View>
-            <Text style={styles.milesLabel}>Skin Miles</Text>
+            <Text style={styles.milesLabel}>{t('home_skin_miles')}</Text>
           </View>
         </View>
 
@@ -56,21 +57,21 @@ export default function HomeScreen() {
           <View style={styles.tipHeader}>
             <View style={styles.tipLeft}>
               <Ionicons name="book-outline" size={16} color={Colors.purple} />
-              <Text style={styles.tipTitle}> Daily Wellness Tip</Text>
+              <Text style={styles.tipTitle}> {t('home_daily_tip')}</Text>
             </View>
             <View style={styles.newBadge}>
-              <Text style={styles.newText}>New</Text>
+              <Text style={styles.newText}>{t('home_new_badge')}</Text>
             </View>
           </View>
           <Text style={styles.tipHeading}>{tipTitle}</Text>
           <Text style={styles.tipDesc}>
             Start your day with this simple yet powerful hydration ritual for glowing skin.
           </Text>
-          <Text style={styles.tipCta}>Tap to read & earn 10 points →</Text>
+          <Text style={styles.tipCta}>{t('home_tap_to_read')}</Text>
         </TouchableOpacity>
 
         {/* Quick Actions */}
-        <Text style={styles.sectionTitle}>Quick Actions</Text>
+        <Text style={styles.sectionTitle}>{t('home_quick_actions')}</Text>
         <View style={styles.grid}>
           {quickActions.map(action => (
             <TouchableOpacity
