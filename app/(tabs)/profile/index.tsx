@@ -1,32 +1,55 @@
-import { ScrollView, View, Text, TouchableOpacity, StyleSheet, Alert, Linking } from 'react-native';
+import { ScrollView, View, Text, TouchableOpacity, StyleSheet, Linking, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '@/constants/colors';
 import { mockUser } from '@/constants/mockData';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useState, useCallback } from 'react';
+import { useRouter, useFocusEffect } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function ProfileScreen() {
   const { lang, setLang, t } = useLanguage();
+  const router = useRouter();
+  const [profileName, setProfileName] = useState(mockUser.fullName);
+  const [profileEmail, setProfileEmail] = useState(mockUser.email);
+  const [profilePhone, setProfilePhone] = useState(mockUser.phone);
+  const [profilePhoto, setProfilePhoto] = useState<string | null>(null);
+
+  useFocusEffect(useCallback(() => {
+    AsyncStorage.multiGet(['profile_name', 'profile_email', 'profile_phone', 'profile_photo']).then(pairs => {
+      const obj = Object.fromEntries(pairs.map(([k, v]) => [k, v ?? '']));
+      if (obj.profile_name) setProfileName(obj.profile_name);
+      if (obj.profile_email) setProfileEmail(obj.profile_email);
+      if (obj.profile_phone) setProfilePhone(obj.profile_phone);
+      if (obj.profile_photo) setProfilePhoto(obj.profile_photo);
+    });
+  }, []));
+
   return (
     <SafeAreaView style={styles.safe}>
       <ScrollView contentContainerStyle={styles.scroll}>
         {/* Avatar section */}
         <View style={styles.avatarSection}>
-          <View style={styles.avatar}>
-            <Text style={styles.initials}>{mockUser.initials}</Text>
-          </View>
+          {profilePhoto ? (
+            <Image source={{ uri: profilePhoto }} style={styles.avatarImg} />
+          ) : (
+            <View style={styles.avatar}>
+              <Text style={styles.initials}>{mockUser.initials}</Text>
+            </View>
+          )}
           <View style={styles.nameRow}>
-            <Text style={styles.name}>{mockUser.fullName}</Text>
+            <Text style={styles.name}>{profileName}</Text>
             <View style={styles.proBadge}>
               <Ionicons name="trophy-outline" size={14} color={Colors.gold} />
               <Text style={styles.proText}> Pro</Text>
             </View>
           </View>
-          <Text style={styles.detail}>{mockUser.email}</Text>
-          <Text style={styles.detail}>{mockUser.phone}</Text>
+          <Text style={styles.detail}>{profileEmail}</Text>
+          <Text style={styles.detail}>{profilePhone}</Text>
           <TouchableOpacity
             style={styles.editBtn}
-            onPress={() => Alert.alert('Edit Profile', 'Profile editing coming soon!')}
+            onPress={() => router.push('/(tabs)/profile/edit')}
           >
             <Ionicons name="pencil-outline" size={15} color={Colors.primary} />
             <Text style={styles.editText}>Edit Profile</Text>
@@ -115,6 +138,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  avatarImg: { width: 88, height: 88, borderRadius: 44 },
   initials: { fontSize: 30, fontWeight: '700', color: Colors.primary },
   nameRow: {
     flexDirection: 'row',
