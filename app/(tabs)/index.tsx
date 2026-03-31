@@ -100,7 +100,7 @@ export default function HomeScreen() {
           {conceptCards.map(card => (
             <TouchableOpacity
               key={card.id}
-              style={[styles.conceptCard, { backgroundColor: card.color }]}
+              style={styles.conceptCard}
               onPress={() => router.push({ pathname: '/(screens)/concept-detail', params: { id: card.id } })}
               activeOpacity={0.85}
             >
@@ -173,10 +173,15 @@ const styles = StyleSheet.create({
   milesEmoji: { fontSize: 20 },
   milesLabel: { fontSize: 12, color: Colors.subtle, marginTop: 2 },
   tipCard: {
-    backgroundColor: '#EDE9F7',
+    backgroundColor: '#fff',
     borderRadius: 16,
     padding: 16,
     marginBottom: 24,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 8,
+    elevation: 2,
   },
   tipHeader: {
     flexDirection: 'row',
@@ -222,6 +227,12 @@ const styles = StyleSheet.create({
     padding: 18,
     justifyContent: 'space-between',
     minHeight: 160,
+    backgroundColor: '#fff',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 8,
+    elevation: 2,
   },
   conceptEmoji: { fontSize: 32, marginBottom: 10 },
   conceptTitle: { fontSize: 15, fontWeight: '800', color: Colors.dark, marginBottom: 6 },
