@@ -1,14 +1,15 @@
-import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { StepperHeader } from '@/components/ui/StepperHeader';
-import { Button } from '@/components/ui/Button';
 import { Colors } from '@/constants/colors';
 import { mockStudios, mockServices } from '@/constants/mockData';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function BookConfirm() {
   const router = useRouter();
+  const { t } = useLanguage();
   const { studioId = '1', serviceId = '1', people = '1', day, month, year, time } = useLocalSearchParams<any>();
   const studio = mockStudios.find(s => s.id === studioId) ?? mockStudios[0];
   const service = mockServices.find(s => s.id === serviceId) ?? mockServices[0];
@@ -29,7 +30,7 @@ export default function BookConfirm() {
   return (
     <SafeAreaView style={styles.safe}>
       <View style={styles.header}>
-        <Text style={styles.title}>Book Treatment</Text>
+        <Text style={styles.title}>{t('book_title')}</Text>
       </View>
       <StepperHeader currentStep={5} />
       <ScrollView contentContainerStyle={styles.scroll}>
@@ -61,12 +62,16 @@ export default function BookConfirm() {
             <Text style={styles.totalVal}>€{total}</Text>
           </View>
         </View>
-        <Button
-          label="Confirm Booking"
-          onPress={() => router.replace('/(tabs)')}
-          style={styles.btn}
-        />
       </ScrollView>
+
+      <SafeAreaView edges={['bottom']} style={styles.bottomBar}>
+        <TouchableOpacity
+          style={styles.continueBtn}
+          onPress={() => router.replace('/(tabs)')}
+        >
+          <Text style={styles.continueBtnText}>{t('book_confirm')}</Text>
+        </TouchableOpacity>
+      </SafeAreaView>
     </SafeAreaView>
   );
 }
@@ -111,5 +116,19 @@ const styles = StyleSheet.create({
   priceVal: { fontSize: 14, color: Colors.dark },
   totalLabel: { fontSize: 16, fontWeight: '700', color: Colors.dark },
   totalVal: { fontSize: 16, fontWeight: '700', color: Colors.gold },
-  btn: { marginTop: 20, marginBottom: 32 },
+  bottomBar: {
+    backgroundColor: '#fff',
+    borderTopWidth: 1,
+    borderTopColor: Colors.border,
+    paddingHorizontal: 20,
+    paddingTop: 12,
+    paddingBottom: Platform.OS === 'ios' ? 8 : 12,
+  },
+  continueBtn: {
+    backgroundColor: Colors.primary,
+    borderRadius: 14,
+    paddingVertical: 16,
+    alignItems: 'center',
+  },
+  continueBtnText: { color: '#fff', fontSize: 16, fontWeight: '700' },
 });

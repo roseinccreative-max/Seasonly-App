@@ -1,24 +1,25 @@
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useState } from 'react';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { StepperHeader } from '@/components/ui/StepperHeader';
-import { Button } from '@/components/ui/Button';
 import { Colors } from '@/constants/colors';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function BookPeople() {
   const router = useRouter();
+  const { t } = useLanguage();
   const [count, setCount] = useState(1);
 
   return (
-    <SafeAreaView style={styles.safe}>
+    <SafeAreaView style={styles.safe} edges={['top', 'left', 'right']}>
       <View style={styles.header}>
-        <Text style={styles.title}>Book Treatment</Text>
+        <Text style={styles.title}>{t('book_title')}</Text>
       </View>
       <StepperHeader currentStep={3} />
       <View style={styles.content}>
-        <Text style={styles.sectionTitle}>Number of People</Text>
+        <Text style={styles.sectionTitle}>{t('book_number_people')}</Text>
 
         {/* Circle picker */}
         <View style={styles.pickerRow}>
@@ -52,31 +53,32 @@ export default function BookPeople() {
             </TouchableOpacity>
           ))}
         </View>
-
-        <Button
-          label="Continue"
-          onPress={() => router.push({ pathname: '/(tabs)/book/date', params: { people: count } })}
-        />
       </View>
+
+      {/* Sticky Continue button */}
+      <SafeAreaView edges={['bottom']} style={styles.bottomBar}>
+        <TouchableOpacity
+          style={styles.continueBtn}
+          onPress={() => router.push({ pathname: '/(tabs)/book/date', params: { people: count } })}
+        >
+          <Text style={styles.continueBtnText}>{t('book_continue')}</Text>
+        </TouchableOpacity>
+      </SafeAreaView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: Colors.background },
-  header: {
-    paddingHorizontal: 20,
-    paddingTop: 16,
-    paddingBottom: 0,
-  },
+  header: { paddingHorizontal: 20, paddingTop: 16 },
   title: { fontSize: 24, fontWeight: '800', color: Colors.dark },
   content: { flex: 1, padding: 20 },
-  sectionTitle: { fontSize: 18, fontWeight: '700', color: Colors.dark, marginBottom: 24 },
+  sectionTitle: { fontSize: 18, fontWeight: '700', color: Colors.dark, marginBottom: 16 },
   pickerRow: {
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 12,
+    marginBottom: 10,
   },
   arrow: {
     width: 44,
@@ -88,23 +90,23 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   circle: {
-    width: 110,
-    height: 110,
-    borderRadius: 55,
+    width: 100,
+    height: 100,
+    borderRadius: 50,
     backgroundColor: Colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
     marginHorizontal: 28,
   },
-  circleNum: { fontSize: 28, fontWeight: '800', color: '#fff' },
+  circleNum: { fontSize: 26, fontWeight: '800', color: '#fff' },
   circleLabel: { fontSize: 12, color: '#fff', marginTop: 2 },
-  hint: { textAlign: 'center', color: Colors.subtle, fontSize: 13, marginBottom: 24 },
-  grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 12, marginBottom: 32 },
+  hint: { textAlign: 'center', color: Colors.subtle, fontSize: 13, marginBottom: 16 },
+  grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
   gridItem: {
     width: '47%',
     backgroundColor: '#fff',
     borderRadius: 14,
-    paddingVertical: 18,
+    paddingVertical: 16,
     alignItems: 'center',
     gap: 8,
     borderWidth: 1.5,
@@ -113,4 +115,19 @@ const styles = StyleSheet.create({
   gridItemActive: { backgroundColor: Colors.primary, borderColor: Colors.primary },
   gridLabel: { fontSize: 13, fontWeight: '600', color: Colors.dark },
   gridLabelActive: { color: '#fff' },
+  bottomBar: {
+    backgroundColor: '#fff',
+    borderTopWidth: 1,
+    borderTopColor: Colors.border,
+    paddingHorizontal: 20,
+    paddingTop: 12,
+    paddingBottom: Platform.OS === 'ios' ? 8 : 12,
+  },
+  continueBtn: {
+    backgroundColor: Colors.primary,
+    borderRadius: 14,
+    paddingVertical: 16,
+    alignItems: 'center',
+  },
+  continueBtnText: { color: '#fff', fontSize: 16, fontWeight: '700' },
 });

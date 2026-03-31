@@ -1,11 +1,11 @@
-import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useState } from 'react';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { StepperHeader } from '@/components/ui/StepperHeader';
-import { Button } from '@/components/ui/Button';
 import { Colors } from '@/constants/colors';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const TIMES = ['09:00', '09:30', '10:00', '10:30', '11:00', '11:30', '12:00', '12:30', '13:00', '13:30', '14:00', '14:30'];
@@ -16,6 +16,7 @@ function getDaysInMonth(year: number, month: number) {
 
 export default function BookDate() {
   const router = useRouter();
+  const { t } = useLanguage();
   const today = new Date();
   const [month, setMonth] = useState(today.getMonth());
   const [year, setYear] = useState(today.getFullYear());
@@ -38,7 +39,7 @@ export default function BookDate() {
   return (
     <SafeAreaView style={styles.safe}>
       <View style={styles.header}>
-        <Text style={styles.title}>Book Treatment</Text>
+        <Text style={styles.title}>{t('book_title')}</Text>
       </View>
       <StepperHeader currentStep={4} />
       <ScrollView contentContainerStyle={styles.scroll}>
@@ -94,31 +95,35 @@ export default function BookDate() {
           <>
             <Text style={styles.sectionTitle}>Select Time</Text>
             <View style={styles.timesGrid}>
-              {TIMES.map(t => (
+              {TIMES.map(slot => (
                 <TouchableOpacity
-                  key={t}
-                  style={[styles.timeSlot, selectedTime === t && styles.timeSlotActive]}
-                  onPress={() => setSelectedTime(t)}
+                  key={slot}
+                  style={[styles.timeSlot, selectedTime === slot && styles.timeSlotActive]}
+                  onPress={() => setSelectedTime(slot)}
                 >
-                  <Ionicons name="time-outline" size={14} color={selectedTime === t ? '#fff' : Colors.gold} />
-                  <Text style={[styles.timeLabel, selectedTime === t && styles.timeLabelActive]}>{t}</Text>
+                  <Ionicons name="time-outline" size={14} color={selectedTime === slot ? '#fff' : Colors.gold} />
+                  <Text style={[styles.timeLabel, selectedTime === slot && styles.timeLabelActive]}>{slot}</Text>
                 </TouchableOpacity>
               ))}
             </View>
           </>
         )}
 
-        {selectedDay && selectedTime && (
-          <Button
-            label="Continue"
+      </ScrollView>
+
+      {selectedDay && selectedTime && (
+        <SafeAreaView edges={['bottom']} style={styles.bottomBar}>
+          <TouchableOpacity
+            style={styles.continueBtn}
             onPress={() => router.push({
               pathname: '/(tabs)/book/confirm',
               params: { day: selectedDay, month: month + 1, year, time: selectedTime },
             })}
-            style={styles.btn}
-          />
-        )}
-      </ScrollView>
+          >
+            <Text style={styles.continueBtnText}>{t('book_continue')}</Text>
+          </TouchableOpacity>
+        </SafeAreaView>
+      )}
     </SafeAreaView>
   );
 }
@@ -173,5 +178,19 @@ const styles = StyleSheet.create({
   timeSlotActive: { backgroundColor: Colors.primary },
   timeLabel: { fontSize: 13, fontWeight: '600', color: Colors.dark },
   timeLabelActive: { color: '#fff' },
-  btn: { marginBottom: 24 },
+  bottomBar: {
+    backgroundColor: '#fff',
+    borderTopWidth: 1,
+    borderTopColor: Colors.border,
+    paddingHorizontal: 20,
+    paddingTop: 12,
+    paddingBottom: Platform.OS === 'ios' ? 8 : 12,
+  },
+  continueBtn: {
+    backgroundColor: Colors.primary,
+    borderRadius: 14,
+    paddingVertical: 16,
+    alignItems: 'center',
+  },
+  continueBtnText: { color: '#fff', fontSize: 16, fontWeight: '700' },
 });

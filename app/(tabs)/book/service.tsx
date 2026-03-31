@@ -5,13 +5,15 @@ import { Ionicons } from '@expo/vector-icons';
 import { StepperHeader } from '@/components/ui/StepperHeader';
 import { Colors } from '@/constants/colors';
 import { mockServices } from '@/constants/mockData';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function BookService() {
   const router = useRouter();
+  const { t } = useLanguage();
   return (
     <SafeAreaView style={styles.safe}>
       <View style={styles.header}>
-        <Text style={styles.title}>Book Treatment</Text>
+        <Text style={styles.title}>{t('book_title')}</Text>
       </View>
       <StepperHeader currentStep={2} />
       <ScrollView contentContainerStyle={styles.scroll}>

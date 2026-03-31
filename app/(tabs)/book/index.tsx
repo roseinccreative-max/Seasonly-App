@@ -5,13 +5,15 @@ import { StepperHeader } from '@/components/ui/StepperHeader';
 import { StudioCard } from '@/components/book/StudioCard';
 import { Colors } from '@/constants/colors';
 import { mockStudios } from '@/constants/mockData';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function BookStudio() {
   const router = useRouter();
+  const { t } = useLanguage();
   return (
     <SafeAreaView style={styles.safe}>
       <View style={styles.header}>
-        <Text style={styles.title}>Book Treatment</Text>
+        <Text style={styles.title}>{t('book_title')}</Text>
       </View>
       <StepperHeader currentStep={1} />
       <ScrollView contentContainerStyle={styles.scroll}>
