@@ -61,20 +61,20 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="rewards"
-        options={{
-          title: t('tab_rewards'),
-          tabBarIcon: ({ color, focused }) => (
-            <TabIcon focused={focused} name="star-outline" activeName="star" color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
         name="shop"
         options={{
           title: t('tab_shop'),
           tabBarIcon: ({ color, focused }) => (
             <TabIcon focused={focused} name="bag-outline" activeName="bag" color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="rewards"
+        options={{
+          title: t('tab_rewards'),
+          tabBarIcon: ({ color, focused }) => (
+            <TabIcon focused={focused} name="star-outline" activeName="star" color={color} />
           ),
         }}
       />
