@@ -1,4 +1,4 @@
-import { ScrollView, View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { ScrollView, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
@@ -6,6 +6,8 @@ import { Colors } from '@/constants/colors';
 import { mockUser } from '@/constants/mockData';
 import { tips } from '@/constants/tips';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { conceptCards } from '@/constants/concept';
+import { HeaderIcons } from '@/components/ui/HeaderIcons';
 
 const quickActionDefs = [
   { key: 'home_book_massage', icon: 'calendar-outline' as const, route: '/(tabs)/book' },
@@ -25,12 +27,15 @@ export default function HomeScreen() {
       <ScrollView contentContainerStyle={styles.scroll}>
         {/* Header */}
         <View style={styles.headerRow}>
-          <View>
+          <View style={{ flex: 1 }}>
             <Text style={styles.greeting}>{t('home_greeting')}, {mockUser.name}</Text>
             <Text style={styles.sub}>{t('home_subtitle')}</Text>
           </View>
-          <View style={styles.proBadge}>
-            <Text style={styles.proText}>👑 Pro</Text>
+          <View style={styles.headerRight}>
+            <View style={styles.proBadge}>
+              <Text style={styles.proText}>👑 Pro</Text>
+            </View>
+            <HeaderIcons showProfile={false} />
           </View>
         </View>
 
@@ -85,6 +90,37 @@ export default function HomeScreen() {
             </TouchableOpacity>
           ))}
         </View>
+
+        {/* Education — The Seasonly Method */}
+        <View style={styles.educationHeader}>
+          <Text style={styles.sectionTitle}>The Seasonly Method</Text>
+          <TouchableOpacity onPress={() => router.push({ pathname: '/(tabs)/concept/[id]', params: { id: '1' } })}>
+            <Text style={styles.seeAllText}>See all</Text>
+          </TouchableOpacity>
+        </View>
+        <Text style={styles.educationSub}>Science-backed skincare & facial fitness</Text>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.conceptRow}>
+          {conceptCards.map(card => (
+            <TouchableOpacity
+              key={card.id}
+              style={[styles.conceptCard, { backgroundColor: card.color }]}
+              onPress={() => router.push({ pathname: '/(tabs)/concept/[id]', params: { id: card.id } })}
+              activeOpacity={0.85}
+            >
+              <Text style={styles.conceptEmoji}>{card.icon}</Text>
+              <Text style={styles.conceptTitle}>
+                {lang === 'fr' ? card.titleFr : card.titleEn}
+              </Text>
+              <Text style={styles.conceptSummary} numberOfLines={2}>
+                {lang === 'fr' ? card.summaryFr : card.summaryEn}
+              </Text>
+              <View style={styles.conceptReadRow}>
+                <Text style={styles.conceptReadText}>Read more</Text>
+                <Ionicons name="arrow-forward" size={13} color={Colors.primary} />
+              </View>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
       </ScrollView>
     </SafeAreaView>
   );
@@ -98,6 +134,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'flex-start',
     marginBottom: 20,
+  },
+  headerRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
   },
   greeting: { fontSize: 22, fontWeight: '800', color: Colors.dark },
   sub: { fontSize: 13, color: Colors.subtle, marginTop: 3 },
@@ -174,4 +215,20 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   actionLabel: { fontSize: 13, fontWeight: '600', color: Colors.dark, textAlign: 'center' },
+  educationHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 28, marginBottom: 4 },
+  educationSub: { fontSize: 13, color: Colors.subtle, marginBottom: 16 },
+  seeAllText: { fontSize: 13, fontWeight: '600', color: Colors.gold },
+  conceptRow: { paddingRight: 20, gap: 12 },
+  conceptCard: {
+    width: 180,
+    borderRadius: 18,
+    padding: 18,
+    justifyContent: 'space-between',
+    minHeight: 160,
+  },
+  conceptEmoji: { fontSize: 32, marginBottom: 10 },
+  conceptTitle: { fontSize: 15, fontWeight: '800', color: Colors.dark, marginBottom: 6 },
+  conceptSummary: { fontSize: 12, color: Colors.medium, lineHeight: 17, flex: 1 },
+  conceptReadRow: { flexDirection: 'row', alignItems: 'center', gap: 4, marginTop: 12 },
+  conceptReadText: { fontSize: 12, fontWeight: '700', color: Colors.primary },
 });
