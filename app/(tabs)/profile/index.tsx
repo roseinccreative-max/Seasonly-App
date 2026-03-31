@@ -1,4 +1,4 @@
-import { ScrollView, View, Text, TouchableOpacity, StyleSheet, Linking, Image } from 'react-native';
+import { ScrollView, View, Text, TouchableOpacity, StyleSheet, Linking, Image, Share, Clipboard } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '@/constants/colors';
@@ -112,6 +112,37 @@ export default function ProfileScreen() {
           <Text style={styles.settingsRowText}>{t('profile_notifications')}</Text>
           <Ionicons name="chevron-forward" size={18} color={Colors.subtle} />
         </TouchableOpacity>
+
+        {/* Referral */}
+        <View style={styles.referralCard}>
+          <View style={styles.referralHeader}>
+            <Ionicons name="gift-outline" size={20} color={Colors.primary} />
+            <Text style={styles.referralTitle}>{t('profile_referral')}</Text>
+          </View>
+          <Text style={styles.referralDesc}>{t('profile_referral_desc')}</Text>
+          <View style={styles.referralLinkBox}>
+            <Text style={styles.referralLinkText} numberOfLines={1}>
+              {`https://seasonly.fr/refer/${profileName.split(' ')[0].toUpperCase()}${new Date().getFullYear()}`}
+            </Text>
+          </View>
+          <View style={styles.referralBtns}>
+            <TouchableOpacity
+              style={styles.referralShareBtn}
+              onPress={() => Share.share({
+                message: `Join me on Seasonly! Use my referral link: https://seasonly.fr/refer/${profileName.split(' ')[0].toUpperCase()}${new Date().getFullYear()}`,
+              })}
+            >
+              <Ionicons name="share-outline" size={16} color="#fff" />
+              <Text style={styles.referralShareBtnText}>{t('profile_share_link')}</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.referralCopyBtn}
+              onPress={() => Clipboard.setString(`https://seasonly.fr/refer/${profileName.split(' ')[0].toUpperCase()}${new Date().getFullYear()}`)}
+            >
+              <Ionicons name="copy-outline" size={16} color={Colors.primary} />
+            </TouchableOpacity>
+          </View>
+        </View>
 
         {/* Language Toggle */}
         <View style={styles.langSection}>
@@ -239,4 +270,49 @@ const styles = StyleSheet.create({
   langBtnActive: { backgroundColor: Colors.primary },
   langBtnText: { fontWeight: '700', fontSize: 13, color: Colors.medium },
   langBtnTextActive: { color: '#fff' },
+  referralCard: {
+    backgroundColor: '#fff',
+    borderRadius: 20,
+    padding: 20,
+    marginTop: 8,
+    marginBottom: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+    elevation: 2,
+  },
+  referralHeader: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 6 },
+  referralTitle: { fontSize: 16, fontWeight: '700', color: Colors.dark },
+  referralDesc: { fontSize: 13, color: Colors.medium, marginBottom: 14 },
+  referralLinkBox: {
+    backgroundColor: Colors.background,
+    borderRadius: 10,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: Colors.border,
+  },
+  referralLinkText: { fontSize: 13, color: Colors.subtle },
+  referralBtns: { flexDirection: 'row', gap: 10 },
+  referralShareBtn: {
+    flex: 1,
+    backgroundColor: Colors.primary,
+    borderRadius: 12,
+    paddingVertical: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+  },
+  referralShareBtnText: { color: '#fff', fontWeight: '700', fontSize: 14 },
+  referralCopyBtn: {
+    width: 46,
+    height: 46,
+    backgroundColor: Colors.primaryLight,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });
