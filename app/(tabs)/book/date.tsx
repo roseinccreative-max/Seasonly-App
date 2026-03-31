@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { StepperHeader } from '@/components/ui/StepperHeader';
+import { HeaderIcons } from '@/components/ui/HeaderIcons';
 import { Colors } from '@/constants/colors';
 import { useLanguage } from '@/contexts/LanguageContext';
 
@@ -40,6 +41,7 @@ export default function BookDate() {
     <SafeAreaView style={styles.safe}>
       <View style={styles.header}>
         <Text style={styles.title}>{t('book_title')}</Text>
+        <HeaderIcons />
       </View>
       <StepperHeader currentStep={4} />
       <ScrollView contentContainerStyle={styles.scroll}>
@@ -134,6 +136,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 16,
     paddingBottom: 0,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   title: { fontSize: 24, fontWeight: '800', color: Colors.dark },
   scroll: { padding: 20 },

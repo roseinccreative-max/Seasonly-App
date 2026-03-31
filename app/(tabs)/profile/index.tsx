@@ -124,7 +124,7 @@ export default function ProfileScreen() {
       <View style={styles.topBar}>
         <Text style={styles.topBarTitle}>Profile</Text>
         <TouchableOpacity style={styles.cartBtn} onPress={() => router.push('/(tabs)/shop/cart')}>
-          <Ionicons name="bag-outline" size={22} color={Colors.dark} />
+          <Ionicons name="bag-outline" size={26} color="#999" />
           {cartCount > 0 && (
             <View style={styles.cartBadge}>
               <Text style={styles.cartBadgeText}>{cartCount > 9 ? '9+' : cartCount}</Text>

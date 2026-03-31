@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { StepperHeader } from '@/components/ui/StepperHeader';
+import { HeaderIcons } from '@/components/ui/HeaderIcons';
 import { Colors } from '@/constants/colors';
 import { useLanguage } from '@/contexts/LanguageContext';
 
@@ -16,6 +17,7 @@ export default function BookPeople() {
     <SafeAreaView style={styles.safe} edges={['top', 'left', 'right']}>
       <View style={styles.header}>
         <Text style={styles.title}>{t('book_title')}</Text>
+        <HeaderIcons />
       </View>
       <StepperHeader currentStep={3} />
       <View style={styles.content}>
@@ -70,7 +72,7 @@ export default function BookPeople() {
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: Colors.background },
-  header: { paddingHorizontal: 20, paddingTop: 16 },
+  header: { paddingHorizontal: 20, paddingTop: 16, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   title: { fontSize: 24, fontWeight: '800', color: Colors.dark },
   content: { flex: 1, padding: 20 },
   sectionTitle: { fontSize: 18, fontWeight: '700', color: Colors.dark, marginBottom: 16 },

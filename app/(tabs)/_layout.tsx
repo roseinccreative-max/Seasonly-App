@@ -81,9 +81,7 @@ export default function TabLayout() {
         name="profile"
         options={{
           title: t('tab_profile'),
-          tabBarIcon: ({ color, focused }) => (
-            <TabIcon focused={focused} name="person-outline" activeName="person" color={color} />
-          ),
+          tabBarButton: () => null,
         }}
       />
     </Tabs>
