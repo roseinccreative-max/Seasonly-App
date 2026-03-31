@@ -4,24 +4,19 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRef } from 'react';
 import { Colors } from '@/constants/colors';
 import { mockUser, mockRoutines, mockRedeemItems } from '@/constants/mockData';
-
-const HOW_TO_EARN = [
-  'Complete daily self-massage routines',
-  'Read Tip To Glow',
-  'Book and attend appointments',
-  'Leave reviews on Google',
-];
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export default function RewardsScreen() {
   const scrollRef = useRef<ScrollView>(null);
+  const { t } = useLanguage();
   const completedCount = mockRoutines.filter(r => r.completed).length;
   const total = mockRoutines.length;
 
   return (
     <SafeAreaView style={styles.safe}>
       <ScrollView ref={scrollRef} contentContainerStyle={styles.scroll}>
-        <Text style={styles.title}>Rewards & Challenges</Text>
-        <Text style={styles.subtitle}>Complete challenges to earn Skin Miles</Text>
+        <Text style={styles.title}>{t('rewards_title')}</Text>
+        <Text style={styles.subtitle}>{t('rewards_subtitle')}</Text>
 
         {/* Stats row */}
         <View style={styles.statsRow}>
@@ -41,20 +36,20 @@ export default function RewardsScreen() {
         {/* Today's Progress */}
         <View style={styles.progressCard}>
           <View style={styles.progressHeader}>
-            <Text style={styles.progressTitle}>Today's Progress</Text>
+            <Text style={styles.progressTitle}>{t('rewards_today_progress')}</Text>
             <Text style={styles.progressCount}>{completedCount}/{total}</Text>
           </View>
           <View style={styles.progressTrack}>
             <View style={[styles.progressFill, { width: `${(completedCount / total) * 100}%` as any }]} />
           </View>
-          <Text style={styles.progressHint}>Complete all challenges to earn 200 bonus points! 🎉</Text>
+          <Text style={styles.progressHint}>{t('rewards_complete_all')}</Text>
         </View>
 
         {/* Self-Massage Routines */}
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Self-Massage Routines</Text>
+          <Text style={styles.sectionTitle}>{t('rewards_self_massage')}</Text>
           <TouchableOpacity onPress={() => scrollRef.current?.scrollToEnd({ animated: true })}>
-            <Text style={styles.seeAll}>See All</Text>
+            <Text style={styles.seeAll}>{t('rewards_see_all')}</Text>
           </TouchableOpacity>
         </View>
 
@@ -83,7 +78,7 @@ export default function RewardsScreen() {
         ))}
 
         {/* Redeem Your Points */}
-        <Text style={styles.redeemTitle}>Redeem Your Points</Text>
+        <Text style={styles.redeemTitle}>{t('rewards_redeem_title')}</Text>
         <View style={styles.redeemGrid}>
           {mockRedeemItems.map(item => {
             const unlocked = mockUser.skinMiles >= item.points;
@@ -103,12 +98,12 @@ export default function RewardsScreen() {
                       { text: 'Confirm', onPress: () => Alert.alert('Success!', `Your "${item.name}" reward is on its way. Check your email.`) },
                     ])}
                   >
-                    <Text style={styles.redeemBtnText}>Redeem</Text>
+                    <Text style={styles.redeemBtnText}>{t('rewards_redeem_btn')}</Text>
                   </TouchableOpacity>
                 ) : (
                   <View style={styles.lockedBtn}>
                     <Ionicons name="lock-closed-outline" size={13} color={Colors.subtle} style={{ marginRight: 4 }} />
-                    <Text style={styles.lockedBtnText}>Locked</Text>
+                    <Text style={styles.lockedBtnText}>{t('rewards_locked')}</Text>
                   </View>
                 )}
               </View>
@@ -118,8 +113,8 @@ export default function RewardsScreen() {
 
         {/* How to Earn Points */}
         <View style={styles.howToCard}>
-          <Text style={styles.howToTitle}>How to Earn Points</Text>
-          {HOW_TO_EARN.map((item, i) => (
+          <Text style={styles.howToTitle}>{t('rewards_how_to_earn')}</Text>
+          {[t('rewards_how_1'), t('rewards_how_2'), t('rewards_how_3'), t('rewards_how_4')].map((item, i) => (
             <View key={i} style={styles.howToRow}>
               <Text style={styles.howToBullet}>·</Text>
               <Text style={styles.howToText}>{item}</Text>
