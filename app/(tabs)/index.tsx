@@ -4,6 +4,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { Colors } from '@/constants/colors';
 import { mockUser } from '@/constants/mockData';
+import { tips } from '@/constants/tips';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 const quickActions = [
   { label: 'Book Massage', icon: 'calendar-outline' as const, route: '/(tabs)/book' },
@@ -14,6 +16,9 @@ const quickActions = [
 
 export default function HomeScreen() {
   const router = useRouter();
+  const { lang, t } = useLanguage();
+  const todayTip = tips[0];
+  const tipTitle = lang === 'fr' ? todayTip.titleFr : todayTip.titleEn;
   return (
     <SafeAreaView style={styles.safe}>
       <ScrollView contentContainerStyle={styles.scroll}>
@@ -47,7 +52,7 @@ export default function HomeScreen() {
         </View>
 
         {/* Daily Wellness Tip */}
-        <TouchableOpacity style={styles.tipCard} onPress={() => router.push('/(tabs)/rewards')} activeOpacity={0.85}>
+        <TouchableOpacity style={styles.tipCard} onPress={() => router.push({ pathname: '/(tabs)/tip/[id]', params: { id: todayTip.id } })} activeOpacity={0.85}>
           <View style={styles.tipHeader}>
             <View style={styles.tipLeft}>
               <Ionicons name="book-outline" size={16} color={Colors.purple} />
@@ -57,7 +62,7 @@ export default function HomeScreen() {
               <Text style={styles.newText}>New</Text>
             </View>
           </View>
-          <Text style={styles.tipHeading}>Morning Hydration Ritual</Text>
+          <Text style={styles.tipHeading}>{tipTitle}</Text>
           <Text style={styles.tipDesc}>
             Start your day with this simple yet powerful hydration ritual for glowing skin.
           </Text>
