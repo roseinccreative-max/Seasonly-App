@@ -103,6 +103,16 @@ export default function ProfileScreen() {
           </View>
         </View>
 
+        {/* Settings rows */}
+        <TouchableOpacity
+          style={styles.settingsRow}
+          onPress={() => router.push('/(tabs)/profile/notifications')}
+        >
+          <Ionicons name="notifications-outline" size={20} color={Colors.dark} />
+          <Text style={styles.settingsRowText}>{t('profile_notifications')}</Text>
+          <Ionicons name="chevron-forward" size={18} color={Colors.subtle} />
+        </TouchableOpacity>
+
         {/* Language Toggle */}
         <View style={styles.langSection}>
           <Text style={styles.langLabel}>{t('profile_language')}</Text>
@@ -211,6 +221,17 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
   },
   tagText: { color: '#fff', fontSize: 13, fontWeight: '600' },
+  settingsRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    backgroundColor: '#fff',
+    borderRadius: 14,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    marginBottom: 10,
+  },
+  settingsRowText: { flex: 1, fontSize: 15, fontWeight: '600', color: Colors.dark },
   langSection: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 24, marginBottom: 8 },
   langLabel: { fontSize: 15, fontWeight: '600', color: Colors.dark },
   langToggle: { flexDirection: 'row', backgroundColor: '#F0EBE6', borderRadius: 20, padding: 3 },
