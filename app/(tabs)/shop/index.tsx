@@ -7,13 +7,12 @@ import { useRouter } from 'expo-router';
 import { Colors } from '@/constants/colors';
 import { products, productCategories, Product } from '@/constants/products';
 import { mockUser } from '@/constants/mockData';
-import { useCartStore } from '@/store/cartStore';
+import { HeaderIcons } from '@/components/ui/HeaderIcons';
 
 export default function ShopScreen() {
   const router = useRouter();
   const [category, setCategory] = useState('All');
   const [search, setSearch] = useState('');
-  const totalItems = useCartStore(s => s.totalItems);
 
   const filtered = products.filter(p =>
     (category === 'All' || p.category === category) &&
@@ -30,14 +29,7 @@ export default function ShopScreen() {
         {/* Header */}
         <View style={styles.header}>
           <Text style={styles.title}>Shop</Text>
-          <TouchableOpacity style={styles.cartIconBtn} onPress={() => router.push('/(tabs)/shop/cart')}>
-            <Ionicons name="bag-outline" size={24} color={Colors.dark} />
-            {totalItems() > 0 && (
-              <View style={styles.cartBadge}>
-                <Text style={styles.cartBadgeText}>{totalItems()}</Text>
-              </View>
-            )}
-          </TouchableOpacity>
+          <HeaderIcons />
         </View>
 
         {/* Search */}
@@ -209,20 +201,6 @@ const styles = StyleSheet.create({
   },
   sectionTitle: { fontSize: 18, fontWeight: '700', color: Colors.dark },
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: 14, marginBottom: 24 },
-  cartIconBtn: { position: 'relative', padding: 4 },
-  cartBadge: {
-    position: 'absolute',
-    top: 0,
-    right: 0,
-    backgroundColor: Colors.primary,
-    borderRadius: 8,
-    minWidth: 16,
-    height: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 3,
-  },
-  cartBadgeText: { color: '#fff', fontSize: 10, fontWeight: '700' },
 });
 
 const pcStyles = StyleSheet.create({

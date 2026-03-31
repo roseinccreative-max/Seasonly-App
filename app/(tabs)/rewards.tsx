@@ -5,6 +5,7 @@ import { useRef } from 'react';
 import { Colors } from '@/constants/colors';
 import { mockUser, mockRoutines, mockRedeemItems } from '@/constants/mockData';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { HeaderIcons } from '@/components/ui/HeaderIcons';
 
 export default function RewardsScreen() {
   const scrollRef = useRef<ScrollView>(null);
@@ -14,8 +15,11 @@ export default function RewardsScreen() {
 
   return (
     <SafeAreaView style={styles.safe}>
+      <View style={styles.screenHeader}>
+        <Text style={styles.headerTitle}>Rewards</Text>
+        <HeaderIcons />
+      </View>
       <ScrollView ref={scrollRef} contentContainerStyle={styles.scroll}>
-        <Text style={styles.title}>{t('rewards_title')}</Text>
         <Text style={styles.subtitle}>{t('rewards_subtitle')}</Text>
 
         {/* Stats row */}
@@ -128,8 +132,16 @@ export default function RewardsScreen() {
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: Colors.background },
+  screenHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingTop: 16,
+    paddingBottom: 4,
+  },
+  headerTitle: { fontSize: 24, fontWeight: '800', color: Colors.dark },
   scroll: { padding: 20, paddingBottom: 40 },
-  title: { fontSize: 24, fontWeight: '800', color: Colors.dark, marginBottom: 4 },
   subtitle: { fontSize: 13, color: Colors.subtle, marginBottom: 20 },
   statsRow: { flexDirection: 'row', gap: 10, marginBottom: 16 },
   statCard: {

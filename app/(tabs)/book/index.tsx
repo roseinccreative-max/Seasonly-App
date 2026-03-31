@@ -6,6 +6,7 @@ import { StudioCard } from '@/components/book/StudioCard';
 import { Colors } from '@/constants/colors';
 import { mockStudios } from '@/constants/mockData';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { HeaderIcons } from '@/components/ui/HeaderIcons';
 
 export default function BookStudio() {
   const router = useRouter();
@@ -14,6 +15,7 @@ export default function BookStudio() {
     <SafeAreaView style={styles.safe}>
       <View style={styles.header}>
         <Text style={styles.title}>{t('book_title')}</Text>
+        <HeaderIcons />
       </View>
       <StepperHeader currentStep={1} />
       <ScrollView contentContainerStyle={styles.scroll}>
@@ -34,7 +36,10 @@ const styles = StyleSheet.create({
   header: {
     paddingHorizontal: 20,
     paddingTop: 16,
-    paddingBottom: 0,
+    paddingBottom: 8,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   title: { fontSize: 24, fontWeight: '800', color: Colors.dark },
   scroll: { padding: 20 },
