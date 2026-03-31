@@ -33,6 +33,7 @@ export default function TabLayout() {
           shadowOpacity: 0.06,
           shadowRadius: 8,
           elevation: 10,
+          justifyContent: 'space-around',
         },
         tabBarLabelStyle: {
           fontSize: 11,
@@ -82,6 +83,7 @@ export default function TabLayout() {
         options={{
           title: t('tab_profile'),
           tabBarButton: () => null,
+          tabBarItemStyle: { display: 'none', width: 0, overflow: 'hidden' },
         }}
       />
     </Tabs>
