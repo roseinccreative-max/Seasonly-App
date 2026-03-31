@@ -15,7 +15,7 @@ export function HeaderIcons({ showProfile = true }: { showProfile?: boolean }) {
         style={styles.iconBtn}
         onPress={() => router.push('/(tabs)/shop/cart')}
       >
-        <Ionicons name="bag-outline" size={22} color={Colors.dark} />
+        <Ionicons name="bag-outline" size={22} color="#999" />
         {count > 0 && (
           <View style={styles.badge}>
             <Text style={styles.badgeText}>{count > 9 ? '9+' : count}</Text>
@@ -27,7 +27,7 @@ export function HeaderIcons({ showProfile = true }: { showProfile?: boolean }) {
           style={styles.iconBtn}
           onPress={() => router.push('/(tabs)/profile')}
         >
-          <Ionicons name="person-circle-outline" size={26} color={Colors.dark} />
+          <Ionicons name="person-circle-outline" size={26} color="#999" />
         </TouchableOpacity>
       )}
     </View>

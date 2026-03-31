@@ -32,9 +32,6 @@ export default function HomeScreen() {
             <Text style={styles.sub}>{t('home_subtitle')}</Text>
           </View>
           <View style={styles.headerRight}>
-            <View style={styles.proBadge}>
-              <Text style={styles.proText}>👑 Pro</Text>
-            </View>
             <HeaderIcons showProfile={false} />
           </View>
         </View>
