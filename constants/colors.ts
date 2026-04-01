@@ -2,7 +2,7 @@ export const Colors = {
   background: '#FFFFFF',
   primary: '#1A1A1A',
   primaryLight: '#F2F2F2',
-  gold: '#C8960C',
+  gold: '#1A1A1A',
   green: '#4CAF50',
   purple: '#7C6FAE',
   purpleLight: '#EDE9F7',

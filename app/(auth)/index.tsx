@@ -29,6 +29,11 @@ export default function AuthScreen() {
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
+          {/* DEV: Skip to home */}
+          <TouchableOpacity style={styles.skipBtn} onPress={() => router.replace('/(tabs)' as any)}>
+            <Text style={styles.skipText}>Skip →</Text>
+          </TouchableOpacity>
+
           {/* Logo area */}
           <View style={styles.logoArea}>
             <Text style={styles.logoText}>seasonly</Text>
@@ -131,6 +136,8 @@ export default function AuthScreen() {
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: Colors.background },
+  skipBtn: { alignSelf: 'flex-end', padding: 16 },
+  skipText: { color: Colors.subtle, fontSize: 13, fontWeight: '600' },
   scroll: { flexGrow: 1, paddingHorizontal: 16, paddingBottom: 32 },
   logoArea: { alignItems: 'center', marginVertical: 40 },
   logoText: {
