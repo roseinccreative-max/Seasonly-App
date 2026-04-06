@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -17,20 +17,15 @@ export default function ConceptDetailScreen() {
   const title = lang === 'fr' ? card.titleFr : card.titleEn;
   const body = lang === 'fr' ? card.bodyFr : card.bodyEn;
 
-  // Render body with **bold** markdown-style
   const renderBody = (text: string) => {
     return text.split('\n').map((line, i) => {
       if (line.startsWith('**') && line.endsWith('**')) {
-        return (
-          <Text key={i} style={styles.boldLine}>
-            {line.replace(/\*\*/g, '')}
-          </Text>
-        );
+        return <Text key={i} style={styles.boldLine}>{line.replace(/\*\*/g, '')}</Text>;
       }
       if (line.startsWith('•')) {
         return (
           <View key={i} style={styles.bulletRow}>
-            <Text style={styles.bullet}>•</Text>
+            <Text style={styles.bullet}>·</Text>
             <Text style={styles.bulletText}>{line.slice(1).trim()}</Text>
           </View>
         );
@@ -41,17 +36,18 @@ export default function ConceptDetailScreen() {
   };
 
   return (
-    <SafeAreaView style={[styles.safe, { backgroundColor: card.color }]} edges={['top', 'left', 'right']}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
-          <Ionicons name="arrow-back" size={22} color={Colors.dark} />
-        </TouchableOpacity>
-      </View>
+    <SafeAreaView style={styles.safe} edges={['top', 'left', 'right']}>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.heroWrap}>
+          <Image source={{ uri: card.image }} style={styles.heroImage} resizeMode="cover" />
+          <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
+            <Ionicons name="arrow-back" size={20} color={Colors.dark} />
+          </TouchableOpacity>
+        </View>
 
-      <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
-        <Text style={styles.icon}>{card.icon}</Text>
-        <Text style={styles.title}>{title}</Text>
-        <View style={styles.bodyCard}>
+        <View style={styles.content}>
+          <Text style={styles.title}>{title}</Text>
+          <View style={styles.divider} />
           {renderBody(body)}
         </View>
       </ScrollView>
@@ -60,45 +56,31 @@ export default function ConceptDetailScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1 },
-  header: {
-    paddingHorizontal: 20,
-    paddingTop: 8,
-    paddingBottom: 8,
-  },
+  safe: { flex: 1, backgroundColor: Colors.background },
+  heroWrap: { position: 'relative' },
+  heroImage: { width: '100%', height: 300 },
   backBtn: {
+    position: 'absolute',
+    top: 16,
+    left: 16,
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: 'rgba(255,255,255,0.8)',
+    backgroundColor: 'rgba(255,255,255,0.9)',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  scroll: { paddingHorizontal: 20, paddingBottom: 40 },
-  icon: { fontSize: 52, textAlign: 'center', marginBottom: 16, marginTop: 8 },
+  content: { padding: 24, paddingBottom: 48 },
   title: {
     fontSize: 28,
     fontWeight: '800',
     color: Colors.dark,
-    textAlign: 'center',
-    marginBottom: 28,
+    marginBottom: 20,
+    letterSpacing: 0.3,
     lineHeight: 36,
   },
-  bodyCard: {
-    backgroundColor: '#fff',
-    borderRadius: 20,
-    padding: 24,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06,
-    shadowRadius: 12,
-    elevation: 3,
-  },
-  bodyText: {
-    fontSize: 15,
-    color: Colors.medium,
-    lineHeight: 24,
-  },
+  divider: { height: 1, backgroundColor: Colors.border, marginBottom: 24 },
+  bodyText: { fontSize: 15, color: Colors.medium, lineHeight: 26 },
   boldLine: {
     fontSize: 16,
     fontWeight: '700',
@@ -106,21 +88,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
     marginBottom: 4,
   },
-  bulletRow: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    marginBottom: 6,
-  },
-  bullet: {
-    fontSize: 15,
-    color: '#C4826A',
-    marginRight: 8,
-    lineHeight: 24,
-  },
-  bulletText: {
-    flex: 1,
-    fontSize: 15,
-    color: Colors.medium,
-    lineHeight: 24,
-  },
+  bulletRow: { flexDirection: 'row', alignItems: 'flex-start', marginBottom: 6 },
+  bullet: { fontSize: 18, color: Colors.dark, marginRight: 10, lineHeight: 26 },
+  bulletText: { flex: 1, fontSize: 15, color: Colors.medium, lineHeight: 26 },
 });

@@ -253,7 +253,7 @@ const styles = StyleSheet.create({
   },
   redeemBtnText: { color: '#fff', fontWeight: '700', fontSize: 13 },
   lockedBtn: {
-    backgroundColor: '#F0EBE6',
+    backgroundColor: '#E8E8E8',
     borderRadius: 20,
     paddingVertical: 9,
     paddingHorizontal: 24,
@@ -264,11 +264,7 @@ const styles = StyleSheet.create({
   },
   lockedBtnText: { color: Colors.subtle, fontWeight: '600', fontSize: 13 },
   howToCard: {
-    backgroundColor: '#FFF8F0',
-    borderRadius: 16,
-    padding: 18,
-    borderWidth: 1,
-    borderColor: '#F2E8DC',
+    paddingVertical: 8,
   },
   howToTitle: { fontSize: 15, fontWeight: '700', color: Colors.dark, marginBottom: 12 },
   howToRow: { flexDirection: 'row', alignItems: 'flex-start', marginBottom: 8 },

@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     // accounting for the label below the circle
     marginBottom: 18, // approx label height + marginTop
   },
-  lineDone: { backgroundColor: Colors.green },
+  lineDone: { backgroundColor: Colors.dark },
   // Column holding circle + label
   stepCol: {
     alignItems: 'center',
@@ -91,8 +91,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  circleDone: { backgroundColor: Colors.green },
-  circleActive: { backgroundColor: Colors.green },
+  circleDone: { backgroundColor: Colors.dark },
+  circleActive: { backgroundColor: Colors.dark },
   num: { fontSize: 12, color: '#999', fontWeight: '600' },
   numActive: { color: '#fff', fontWeight: '700' },
   stepLabel: {
@@ -101,6 +101,6 @@ const styles = StyleSheet.create({
     marginTop: 4,
     textAlign: 'center',
   },
-  stepLabelActive: { color: Colors.green, fontWeight: '600' },
-  stepLabelDone: { color: Colors.green },
+  stepLabelActive: { color: Colors.dark, fontWeight: '600' },
+  stepLabelDone: { color: Colors.dark },
 });

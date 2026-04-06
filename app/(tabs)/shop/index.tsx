@@ -24,14 +24,13 @@ export default function ShopScreen() {
 
   return (
     <SafeAreaView style={styles.safe}>
-      <ScrollView contentContainerStyle={styles.scroll}>
-        {/* Header */}
+      {/* Sticky header */}
+      <View style={styles.stickyHeader}>
         <View style={styles.header}>
           <Text style={styles.title}>Shop</Text>
           <HeaderIcons />
         </View>
 
-        {/* Search */}
         <View style={styles.searchRow}>
           <Ionicons name="search-outline" size={16} color={Colors.subtle} style={{ marginRight: 8 }} />
           <TextInput
@@ -43,7 +42,6 @@ export default function ShopScreen() {
           />
         </View>
 
-        {/* Categories */}
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.catsScroll} contentContainerStyle={styles.catsContent}>
           {productCategories.map(cat => (
             <TouchableOpacity
@@ -55,7 +53,9 @@ export default function ShopScreen() {
             </TouchableOpacity>
           ))}
         </ScrollView>
+      </View>
 
+      <ScrollView contentContainerStyle={styles.scroll}>
         {/* Skin Miles banner */}
         <View style={styles.milesBanner}>
           <View style={styles.milesLeft}>
@@ -135,12 +135,20 @@ function ProductCard({ product, onPress }: { product: Product; onPress: () => vo
 
 const styles = StyleSheet.create({
   safe: { flex: 1, backgroundColor: Colors.background },
+  stickyHeader: {
+    backgroundColor: Colors.background,
+    paddingHorizontal: 20,
+    paddingTop: 16,
+    paddingBottom: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.border,
+  },
   scroll: { padding: 20, paddingBottom: 40 },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 16,
   },
   title: { fontSize: 28, fontWeight: '800', color: Colors.dark },
   searchRow: {
@@ -155,7 +163,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   searchInput: { flex: 1, fontSize: 14, color: Colors.dark },
-  catsScroll: { marginBottom: 20 },
+  catsScroll: { marginBottom: 8 },
   catsContent: { paddingBottom: 4 },
   catPill: {
     paddingHorizontal: 20,

@@ -86,6 +86,13 @@ export default function TabLayout() {
           tabBarItemStyle: { display: 'none', width: 0, overflow: 'hidden' },
         }}
       />
+      <Tabs.Screen
+        name="concept"
+        options={{
+          tabBarButton: () => null,
+          tabBarItemStyle: { display: 'none', width: 0, overflow: 'hidden' },
+        }}
+      />
     </Tabs>
   );
 }
